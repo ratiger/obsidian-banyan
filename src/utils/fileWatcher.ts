@@ -68,8 +68,9 @@ export class FileWatcher {
     this.emit({ type: 'rename', fileInfo });
   }
 
-  private handleMetaChange(file: TFile) {
+  private async handleMetaChange(file: TFile) {
     if (!this || !this.plugin.fileUtils.isLegalMarkdownFile(file)) return;
+    await ensureFileID(file, this.plugin.app);
     const fileInfo = createFileInfo(file, this.plugin.app);
     if (!fileInfo) return;
     this.emit({ type: 'meta-change', fileInfo });
