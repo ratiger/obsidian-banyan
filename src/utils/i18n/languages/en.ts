@@ -63,8 +63,10 @@ export default {
     setting_header_cards: "Card view",
     setting_header_editor: "Create note",
 
-    setting_note_directory_name: "Note directory",
-    setting_note_directory_desc: "Directory this plugin works on.",
+    setting_note_directory_name: "Notes directory",
+    setting_note_directory_desc1: "This plugin only manages notes in this directory.",
+    setting_note_directory_desc2: "The structure of notes and subdirectories in this directory is not important.",
+    setting_note_directory_desc3: "Migrated notes to this directory will be managed by this plugin.",
     setting_note_directory_placeholder: "Please input the path of the directory",
 
     setting_on_open_name: "Open after start",

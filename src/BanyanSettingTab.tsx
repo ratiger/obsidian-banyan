@@ -19,8 +19,8 @@ export class BanyanSettingTab extends PluginSettingTab {
 
 		// 基础设置
 		new Setting(containerEl).setName(i18n.t('setting_header_basic')).setHeading();
-		this.setupOpenWhenStartObsidianSetting(containerEl);
 		this.setupCardsDirectorySetting(containerEl);
+		this.setupOpenWhenStartObsidianSetting(containerEl);		
 		this.setupCardsColumnsSetting(containerEl);
 
 		// 卡片视图
@@ -39,10 +39,16 @@ export class BanyanSettingTab extends PluginSettingTab {
 	}
 
 	setupCardsDirectorySetting(containerEl: HTMLElement) {
+		const dateDesc = document.createDocumentFragment();  
+		dateDesc.appendText(i18n.t('setting_note_directory_desc1'));
+		dateDesc.createEl('br');
+		dateDesc.appendText(i18n.t('setting_note_directory_desc2'));
+		dateDesc.createEl('br');
+		dateDesc.appendText(i18n.t('setting_note_directory_desc3'));
 		const settings = useCombineStore.getState().settings;
 		new Setting(containerEl)
 			.setName(i18n.t('setting_note_directory_name'))
-			.setDesc(i18n.t('setting_note_directory_desc'))
+			.setDesc(dateDesc)
 			.addText(async text => {
 				new FolderSuggest(this.app, text.inputEl, async (value) => {
 					text.setValue(value);

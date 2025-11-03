@@ -64,7 +64,9 @@ export default {
     setting_header_editor: "新建笔记",
 
     setting_note_directory_name: "笔记目录",
-    setting_note_directory_desc: "「卡片面板」的笔记目录。",
+    setting_note_directory_desc1: "「卡片面板」只会管理该目录下的所有笔记。",
+    setting_note_directory_desc2: "该目录下笔记和子目录存放结构不再紧要。",
+    setting_note_directory_desc3: "已有笔记迁移到该目录之下，即可受本插件管理。",
     setting_note_directory_placeholder: "请输入目录的路径",
 
     setting_on_open_name: "启动时自动打开面板",
