@@ -1,6 +1,6 @@
 {
 	"name": "banyan",
-	"version": "1.3.4",
+	"version": "1.3.5",
 	"description": "A card-based homepage to browse, organize, and navigate notes effortlessly with multi-tag filtering.",
 	"main": "main.js",
 	"scripts": {

@@ -1,5 +1,12 @@
 ### Changelog
 
+### 1.3.5
+
+Improvements
+
+- Sidebar - Add a button to open plugin setting panel. 
+- Imroved some descriptions.
+
 #### 1.3.4 
 
 Improvements
