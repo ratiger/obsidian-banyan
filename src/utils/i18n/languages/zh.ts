@@ -59,18 +59,18 @@ export default {
     select_view_to_import: "选择要导入的视图",
 
     /* 设置 */
-    setting_header_basic: "基础设置",
-    setting_header_cards: "卡片视图",
-    setting_header_editor: "新建笔记",
+    setting_header_basic: "⚙️ 基础设置",
+    setting_header_cards: "🗂 卡片视图",
+    setting_header_editor: "✏️ 新建笔记",
 
     setting_note_directory_name: "笔记目录",
     setting_note_directory_desc1: "「卡片面板」只会管理该目录下的所有笔记。",
-    setting_note_directory_desc2: "该目录下笔记和子目录存放结构不再紧要。",
+    setting_note_directory_desc2: "该目录下的笔记和子目录的存放结构不再紧要。",
     setting_note_directory_desc3: "已有笔记迁移到该目录之下，即可受本插件管理。",
     setting_note_directory_placeholder: "请输入目录的路径",
 
     setting_on_open_name: "启动时自动打开面板",
-    setting_on_open_desc: "启用后，Obsidian 启动时会自动打开「卡片面板」。",
+    setting_on_open_desc: "开启后，Obsidian 启动时会自动打开「卡片面板」。",
 
     setting_title_display_mode_name: "显示标题",
     setting_title_display_mode_desc: "默认的时间戳格式标题不会显示。",

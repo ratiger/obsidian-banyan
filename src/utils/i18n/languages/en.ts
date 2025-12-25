@@ -59,9 +59,9 @@ export default {
     select_view_to_import: "Select view to import",
 
     /* 设置 */
-    setting_header_basic: "Basic",
-    setting_header_cards: "Card view",
-    setting_header_editor: "Create note",
+    setting_header_basic: "⚙️ Basic",
+    setting_header_cards: "🗂 Card view",
+    setting_header_editor: "✏️ Create note",
 
     setting_note_directory_name: "Notes directory",
     setting_note_directory_desc1: "This plugin only manages notes in this directory.",
