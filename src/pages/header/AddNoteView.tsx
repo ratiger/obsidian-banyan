@@ -27,7 +27,7 @@ const AddNoteView: React.FC<AddNoteViewProps> = ({ app, plugin, onAdd }) => {
   const [tags, setTags] = useState<string[]>([]);
   const [title, setTitle] = useState<string>('');
   const [isTitleInvalid, setIsTitleInvalid] = useState<boolean>(false);
-  const settings = useCombineStore((state) => state.settings);
+
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const updateHasContent = useCallback(() => {
@@ -112,26 +112,26 @@ const AddNoteView: React.FC<AddNoteViewProps> = ({ app, plugin, onAdd }) => {
   return (
     <div className={"add-note-container" + (focused ? " add-note-container--focusd" : "")} >
       <div className={`add-note-title ${isTitleInvalid ? 'add-note-title-input--invalid' : ''}`}>
-          <textarea
-            ref={textareaRef}
-            onFocus={() => setTitleFocused(true)}
-            onBlur={() => setTitleFocused(false)}
-            placeholder={i18n.t('editor_title_placeholder')}
-            value={title}
-            rows={1}
-            onChange={(e) => {
-              const newTitle = e.target.value;
-              setTitle(newTitle);
-              setIsTitleInvalid(newTitle.length > 0 && !legalFileName(newTitle));
-            }}
-            onKeyDown={(e) => {
-              // 防止用户在标题输入换行符
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                editor?.focus();
-              }
-            }}
-          />
+        <textarea
+          ref={textareaRef}
+          onFocus={() => setTitleFocused(true)}
+          onBlur={() => setTitleFocused(false)}
+          placeholder={i18n.t('editor_title_placeholder')}
+          value={title}
+          rows={1}
+          onChange={(e) => {
+            const newTitle = e.target.value;
+            setTitle(newTitle);
+            setIsTitleInvalid(newTitle.length > 0 && !legalFileName(newTitle));
+          }}
+          onKeyDown={(e) => {
+            // 防止用户在标题输入换行符
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault();
+              editor?.focus();
+            }
+          }}
+        />
       </div>
       <div className="add-note-content-container" onClick={(e) => {
         editor?.focus();
@@ -150,13 +150,13 @@ const AddNoteView: React.FC<AddNoteViewProps> = ({ app, plugin, onAdd }) => {
             const body = await plugin.fileUtils.readFileContent(file);
             const _title = title.trim();
             if (body.trim().length === 0 && tags.length === 0 && _title.length === 0) return;
-            
+
             // 检查标题合法性
             if (_title && !legalFileName(_title)) {
               new Notice(i18n.t('illegal_title_chars'));
               return;
-            } 
-            
+            }
+
             await plugin.fileUtils.addFile(_title, body, tags, false);
             await plugin.fileUtils.modifyFileContent(file, '');
             setTags([]);

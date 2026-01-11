@@ -25,11 +25,11 @@ export const useCombineStore = create<CombineState>()((...a) => ({
         const [set] = a;
         set({
             plugin: plugin,
-            settings: plugin.settings,
-            appData: plugin.appData,
-            viewSchemes: plugin.appData.viewSchemes,
-            filterSchemes: plugin.appData.filterSchemes,
-            randomReviewFilters: plugin.appData.randomReviewFilters,
+            settings: { ...plugin.settings },
+            appData: { ...plugin.appData },
+            viewSchemes: [...plugin.appData.viewSchemes],
+            filterSchemes: [...plugin.appData.filterSchemes],
+            randomReviewFilters: [...plugin.appData.randomReviewFilters],
             curScheme: getDefaultFilterScheme(plugin.appData.filterSchemes),
         });
     },

@@ -21,8 +21,10 @@ export interface SettingsState {
     updateSortType: (sortType: SortType) => void;
     updateFirstUseDate: (date: string) => void;
     updateShowBacklinksInCardNote: (show: boolean) => void;
-    updateUseCardNote2: (use: boolean) => void; // 新增
-    updateRandomBrowse: (randomBrowse: boolean) => void; // 新增：乱序浏览开关
+    updateUseCardNote2: (use: boolean) => void;
+    updateRandomBrowse: (randomBrowse: boolean) => void;
+    updateUseZkPrefixerFormat: (use: boolean) => void;
+    updateShowAddNoteRibbonIcon: (show: boolean) => void;
     updateCardContentMaxHeight: (height: CardContentMaxHeightType) => void; // 新增：卡片内容最大高度
     updateFontTheme: (theme: FontTheme) => void;
     updateNewNoteLocationMode: (mode: NewNoteLocationMode) => void;
@@ -43,18 +45,24 @@ export const useSettingsStore: StateCreator<CombineState, [], [], SettingsState>
 
     updateSettings: (newSettings: Partial<BanyanPluginSettings>) => {
         const plugin = get().plugin;
-        const updatedSettings = { ...plugin.settings, ...newSettings };
-        plugin.settings = updatedSettings;
+        const updatedSettings = { ...get().settings, ...newSettings };
+        plugin.settings = { ...updatedSettings }; // Sync back to plugin
         plugin.saveSettings();
         set({ settings: updatedSettings });
     },
 
     updateAppData: (newAppData: Partial<BanyanAppData>) => {
         const plugin = get().plugin;
-        const updatedAppData = { ...plugin.appData, ...newAppData };
-        plugin.appData = updatedAppData;
+        const updatedAppData = { ...get().appData, ...newAppData };
+        plugin.appData = { ...updatedAppData }; // Sync back to plugin
         plugin.saveAppData();
-        set({ appData: updatedAppData });
+
+        const newState: Partial<CombineState> = { appData: updatedAppData };
+        if (newAppData.viewSchemes) newState.viewSchemes = newAppData.viewSchemes;
+        if (newAppData.filterSchemes) newState.filterSchemes = newAppData.filterSchemes;
+        if (newAppData.randomReviewFilters) newState.randomReviewFilters = newAppData.randomReviewFilters;
+
+        set(newState);
     },
 
     updateCardsDirectory: (directory: string) => {
@@ -89,6 +97,12 @@ export const useSettingsStore: StateCreator<CombineState, [], [], SettingsState>
     },
     updateRandomBrowse: (randomBrowse: boolean) => {
         get().updateAppData({ randomBrowse });
+    },
+    updateUseZkPrefixerFormat: (use: boolean) => {
+        get().updateSettings({ useZkPrefixerFormat: use });
+    },
+    updateShowAddNoteRibbonIcon: (show: boolean) => {
+        get().updateSettings({ showAddNoteRibbonIcon: show });
     },
     updateCardContentMaxHeight: (height: CardContentMaxHeightType) => {
         get().updateSettings({ cardContentMaxHeight: height });

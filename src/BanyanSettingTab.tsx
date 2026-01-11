@@ -139,29 +139,27 @@ export class BanyanSettingTab extends PluginSettingTab {
 	}
 
 	setupUseZkPrefixerFormatSetting(containerEl: HTMLElement) {
-		const settings = this.plugin.settings;
+		const settings = useCombineStore.getState().settings;
 		new Setting(containerEl)
 			.setName(i18n.t('setting_use_zk_prefixer_format_name'))
 			.setDesc(i18n.t('setting_use_zk_prefixer_format_desc'))
 			.addToggle(toggle => {
 				toggle.setValue(settings.useZkPrefixerFormat ?? true)
 					.onChange(async (value) => {
-						this.plugin.settings.useZkPrefixerFormat = value;
-						await this.plugin.saveSettings();
+						useCombineStore.getState().updateUseZkPrefixerFormat(value);
 					});
 			});
 	}
 
 	setupShowAddNoteRibbonSetting(containerEl: HTMLElement) {
-		const settings = this.plugin.settings;
+		const settings = useCombineStore.getState().settings;
 		new Setting(containerEl)
 			.setName(i18n.t('setting_show_add_note_ribbon_name'))
 			.setDesc(i18n.t('setting_show_add_note_ribbon_desc'))
 			.addToggle(toggle => {
 				toggle.setValue(settings.showAddNoteRibbonIcon ?? true)
 					.onChange(async (value) => {
-						this.plugin.settings.showAddNoteRibbonIcon = value;
-						await this.plugin.saveSettings();
+						useCombineStore.getState().updateShowAddNoteRibbonIcon(value);
 						// 重新设置功能区图标
 						this.plugin.setupCreateNoteRibbonBtn();
 					});
