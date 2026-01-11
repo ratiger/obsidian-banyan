@@ -36,7 +36,7 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
     displayFiles: [],
 
     setCurScheme(scheme: FilterScheme | ViewScheme) {
-        set({ curScheme: scheme });
+        set({ curScheme: scheme, editingFilesPath: [], needRefresh: false });
     },
     requestData: async () => {
         const plugin = get().plugin;

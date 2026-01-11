@@ -140,19 +140,17 @@ const CardNote2 = ({ fileInfo, isPinned }: { fileInfo: FileInfo, isPinned: boole
 
   const addEditingFile = useCombineStore((state) => state.addEditingFile);
   const deleteEditingFile = useCombineStore((state) => state.deleteEditingFile);
+  const editMode = useCombineStore((state) => state.editingFilesPath.includes(fileInfo.file.path));
 
-  const [editMode, setEditMode] = React.useState(false);
   const shouldShowTitle = useCombineStore((state) => state.shouldShowTitle);
 
   const handleEditStart = React.useCallback(() => {
     addEditingFile(fileInfo.file.path);
-    setEditMode(true);
-  }, [addEditingFile]);
+  }, [addEditingFile, fileInfo.file.path]);
 
   const handleEditEnd = React.useCallback(() => {
     deleteEditingFile(fileInfo.file.path);
-    setEditMode(false);
-  }, [deleteEditingFile]);
+  }, [deleteEditingFile, fileInfo.file.path]);
 
   return (
     <div
