@@ -15,12 +15,12 @@ export const Icon = ({ name, size = 's', color = 'var(--icon-color)', className 
     }
   }, [name]);
 
-  const value = typeof size === 'string' ? `var(--icon-${size}` : `${size}px`;
+  const value = typeof size === 'string' ? `var(--icon-${size})` : `${size}px`;
 
   return <div ref={ref} className={`${className ?? ""}`} style={{
     '--icon-size': value,
     height: value, // 需要保留，不然div会比icon高一点
     width: value,
     color: color,
-  } as React.CSSProperties } />;
+  } as React.CSSProperties} />;
 }

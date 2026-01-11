@@ -96,7 +96,8 @@
     cursor: pointer;
     gap: 6px;
     transition: background 0.2s, color 0.2s;
-    height: 36px;
+    height: 40px;
+    flex-shrink: 0;
 }
 
 .sidebar-btn-selectd {
@@ -120,7 +121,7 @@
 }
 
 .sidebar-btn-left-icon-unclickable {
-    padding: 4px 6px;
+    padding: 6px 6px;
 }
 
 .sidebar-btn-left-margin {
