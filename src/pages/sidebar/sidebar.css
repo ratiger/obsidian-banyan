@@ -19,10 +19,10 @@
     transition: left 0.25s cubic-bezier(.4, 0, .2, 1);
     display: flex;
     flex-direction: column;
-    padding-bottom: 50px;
+    /* padding-bottom: 50px; Remove bottom padding from container */
     flex: 1;
-    overflow-y: auto;
-    scrollbar-width: none;
+    overflow: hidden;
+    /* Change from overflow-y: auto to hidden */
 }
 
 .sidebar-container-visible {
@@ -31,7 +31,7 @@
 
 .sidebar-container-hidden {
     left: -360px;
-} 
+}
 
 .sidebar-toggle-button-hidden {
     display: none;
@@ -46,9 +46,17 @@
 .sidebar-content-container {
     display: flex;
     flex-direction: column;
-    padding: 0 16px;
+    padding: 0 16px 50px 16px;
+    /* Moved bottom padding here */
     width: 292px;
     margin-right: 6px;
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.sidebar-content-container::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar-margin-top {
