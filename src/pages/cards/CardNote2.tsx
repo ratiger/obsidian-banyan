@@ -43,8 +43,8 @@ const NoteContentView = ({ app, fileInfo, editMode, endEdit }: { app: App, fileI
     const observer = new ResizeObserver(() => {
       const ele = ref.current?.querySelector('.view-content');
       if (ele) {
-        const maxHeight = settings.cardContentMaxHeight === 'expand' ? Infinity : 
-                         settings.cardContentMaxHeight === 'short' ? 160 : 300;
+        const maxHeight = settings.cardContentMaxHeight === 'expand' ? Infinity :
+          settings.cardContentMaxHeight === 'short' ? 160 : 300;
         setOverflow(ele.scrollHeight > maxHeight);
       }
     });
@@ -60,7 +60,7 @@ const NoteContentView = ({ app, fileInfo, editMode, endEdit }: { app: App, fileI
 
   const getContentClassName = () => {
     let className = "card-note-content";
-    
+
     if (isExpanded) {
       className += " card-note-content--expanded";
     } else if (settings.cardContentMaxHeight === 'expand') {
@@ -70,11 +70,11 @@ const NoteContentView = ({ app, fileInfo, editMode, endEdit }: { app: App, fileI
     } else {
       className += " card-note-content--normal";
     }
-    
+
     if (overflow && !isExpanded && settings.cardContentMaxHeight !== 'expand') {
       className += " card-note-content--overflow";
     }
-    
+
     return className;
   };
 
@@ -96,7 +96,7 @@ const NoteContentView = ({ app, fileInfo, editMode, endEdit }: { app: App, fileI
     <div style={{ position: 'relative' }}>
       <div ref={ref} className={getContentClassName()} data-font-theme={settings.fontTheme} />
       {overflow && !isExpanded && settings.cardContentMaxHeight !== 'expand' && (
-        <div 
+        <div
           className="card-note-expand-button"
           onClick={handleExpandToggle}
         >
@@ -104,7 +104,7 @@ const NoteContentView = ({ app, fileInfo, editMode, endEdit }: { app: App, fileI
         </div>
       )}
       {isExpanded && settings.cardContentMaxHeight !== 'expand' && (
-        <div 
+        <div
           className="card-note-expand-button"
           onClick={handleExpandToggle}
         >
@@ -119,7 +119,7 @@ const CardNote2 = ({ fileInfo }: { fileInfo: FileInfo }) => {
 
   const plugin = useCombineStore((state) => state.plugin);
   const settings = useCombineStore((state) => state.settings);
-  const isPinned = useCombineStore((state) => state.curScheme.pinned.includes(fileInfo.id));
+  const isPinned = useCombineStore((state) => state.curScheme.pinned.includes(fileInfo.file.path));
   const setCurScheme = useCombineStore((state) => state.setCurScheme);
   const app = plugin.app;
   const isCreated = settings.sortType === 'created' || settings.sortType === 'earliestCreated';
@@ -132,12 +132,12 @@ const CardNote2 = ({ fileInfo }: { fileInfo: FileInfo }) => {
   const shouldShowTitle = useCombineStore((state) => state.shouldShowTitle);
 
   const handleEditStart = React.useCallback(() => {
-    addEditingFile(fileInfo.id);
+    addEditingFile(fileInfo.file.path);
     setEditMode(true);
   }, [addEditingFile]);
 
   const handleEditEnd = React.useCallback(() => {
-    deleteEditingFile(fileInfo.id);
+    deleteEditingFile(fileInfo.file.path);
     setEditMode(false);
   }, [deleteEditingFile]);
 

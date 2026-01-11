@@ -1,6 +1,6 @@
 import { TFile, Vault, MetadataCache } from 'obsidian';
 import BanyanPlugin from 'src/main';
-import { createFileInfo, ensureFileID, FileInfo } from 'src/models/FileInfo';
+import { createFileInfo, FileInfo } from 'src/models/FileInfo';
 import { useCombineStore } from 'src/store';
 
 export type FileChangeType = 'create' | 'delete' | 'modify' | 'rename' | 'meta-change';
@@ -20,6 +20,8 @@ export class FileWatcher {
   private vault: Vault;
   private metadataCache: MetadataCache;
   private callbacks: Set<FileChangeCallback> = new Set();
+  // 引用 store 中的 rename 处理函数
+  private updateWhenRenameFile = useCombineStore.getState().updateWhenRenameFile;
 
   constructor(plugin: BanyanPlugin) {
     this.plugin = plugin;
@@ -28,6 +30,7 @@ export class FileWatcher {
     this.handleCreate = this.handleCreate.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleModify = this.handleModify.bind(this);
+    this.handleRename = this.handleRename.bind(this); // 绑定 rename
     this.handleMetaChange = this.handleMetaChange.bind(this);
     this.registerEvents();
     this.updateBacklinksMapIfNeeded();
@@ -43,7 +46,6 @@ export class FileWatcher {
 
   private async handleCreate(file: TFile) {
     if (!this || !this.plugin.fileUtils.isLegalMarkdownFile(file)) return;
-    await ensureFileID(file, this.plugin.app);
     const fileInfo = createFileInfo(file, this.plugin.app);
     if (!fileInfo) return;
     this.emit({ type: 'create', fileInfo });
@@ -63,6 +65,10 @@ export class FileWatcher {
 
   private handleRename(file: TFile, oldPath: string) {
     if (!this || !this.plugin.fileUtils.isLegalMarkdownFile(file)) return;
+
+    // 触发全局重命名更新
+    this.updateWhenRenameFile(oldPath, file.path);
+
     const fileInfo = createFileInfo(file, this.plugin.app);
     if (!fileInfo) return;
     this.emit({ type: 'rename', fileInfo });
@@ -70,7 +76,6 @@ export class FileWatcher {
 
   private async handleMetaChange(file: TFile) {
     if (!this || !this.plugin.fileUtils.isLegalMarkdownFile(file)) return;
-    await ensureFileID(file, this.plugin.app);
     const fileInfo = createFileInfo(file, this.plugin.app);
     if (!fileInfo) return;
     this.emit({ type: 'meta-change', fileInfo });
@@ -85,6 +90,7 @@ export class FileWatcher {
     this.callbacks.forEach(cb => cb(change));
     this.updateBacklinksMapIfNeeded();
   }
+  // ...
 
   private updateBacklinksMapIfNeeded() {
     // 节流+内容对比，避免无效重建

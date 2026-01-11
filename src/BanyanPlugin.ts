@@ -5,7 +5,7 @@ import { BanyanSettingTab } from './BanyanSettingTab';
 import { FileUtils } from './utils/fileUtils';
 import { i18n } from './utils/i18n';
 import { TagFilter } from './models/TagFilter';
-import { ensureFileID } from './models/FileInfo';
+
 
 export default class BanyanPlugin extends Plugin {
 	settings: BanyanPluginSettings;
@@ -68,9 +68,9 @@ export default class BanyanPlugin extends Plugin {
 	}
 
 	public openSettingsPanel(): void {
-        (this.app as any).setting.open();
-        (this.app as any).setting.openTabById(this.manifest.id);
-    }
+		(this.app as any).setting.open();
+		(this.app as any).setting.openTabById(this.manifest.id);
+	}
 
 	randomRibbonIcons: HTMLElement[] = [];
 	addNoteRibbonIcon: HTMLElement | null = null;
@@ -103,7 +103,7 @@ export default class BanyanPlugin extends Plugin {
 		const icons = ['dice', 'shuffle', 'dices', 'dice-6',
 			'dice-5', 'dice-4', 'dice-3', 'dice-2', 'dice-1'];
 		this.randomRibbonIcons = [];
-		this.settings.randomReviewFilters.forEach((filter) => {	
+		this.settings.randomReviewFilters.forEach((filter) => {
 			const name = `${i18n.t('open_random_note')} - ${filter.name}`;
 			const icon = icons[filter.id % icons.length];
 			this.addCommand({
@@ -174,31 +174,21 @@ export default class BanyanPlugin extends Plugin {
 		}
 		// *** 版本更新时，在以上添加更新逻辑 ***
 		this.settings.settingsVersion = CUR_SETTINGS_VERSION;
-		await this.ensureAllFileID();
 		this.updateSavedFile();
 		this.saveSettings();
 	}
 
-	ensureAllFileID = async () => {
-		let cnt = Math.floor(Math.random() * 1000);
-		const allFiles = this.fileUtils.getAllRawFiles();
-		for (const file of allFiles) {
-			await ensureFileID(file, this.app, cnt);
-			cnt = cnt >= 999 ? 1 : cnt + 1;
-		}
-	}
-
 	updateSavedFile = () => {
-		const _allFiles = this.fileUtils.getAllFiles().map((f) => f.id);
+		const _allFiles = this.fileUtils.getAllFiles().map((f) => f.file.path);
 		if (_allFiles.length === 0) return; // 防止获取不到文件，却清空数据的情况
 		const allFiles = new Set(_allFiles);
 		this.settings.viewSchemes = [...this.settings.viewSchemes.map((scheme) => {
-			const newFiles = [...scheme.files.filter((file) => allFiles.has(file))];
-			const newPinned = [...scheme.pinned.filter((file) => allFiles.has(file))];
+			const newFiles = [...scheme.files.filter((path) => allFiles.has(path))];
+			const newPinned = [...scheme.pinned.filter((path) => allFiles.has(path))];
 			return { ...scheme, files: newFiles, pinned: newPinned };
 		})];
 		this.settings.filterSchemes = [...this.settings.filterSchemes.map((scheme) => {
-			const newPinned = [...scheme.pinned.filter((file) => allFiles.has(file))];
+			const newPinned = [...scheme.pinned.filter((path) => allFiles.has(path))];
 			return { ...scheme, pinned: newPinned };
 		})];
 	}

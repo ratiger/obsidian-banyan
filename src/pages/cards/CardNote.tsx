@@ -37,8 +37,8 @@ const NoteContentView = ({ app, fileInfo }: { app: App, fileInfo: FileInfo }) =>
     const observer = new ResizeObserver(() => {
       const ele = ref.current?.querySelector('.view-content');
       if (ele) {
-        const maxHeight = settings.cardContentMaxHeight === 'expand' ? Infinity : 
-                         settings.cardContentMaxHeight === 'short' ? 160 : 300;
+        const maxHeight = settings.cardContentMaxHeight === 'expand' ? Infinity :
+          settings.cardContentMaxHeight === 'short' ? 160 : 300;
         setOverflow(ele.scrollHeight > maxHeight);
       }
     });
@@ -54,7 +54,7 @@ const NoteContentView = ({ app, fileInfo }: { app: App, fileInfo: FileInfo }) =>
 
   const getContentClassName = () => {
     let className = "card-note-content";
-    
+
     if (isExpanded) {
       className += " card-note-content--expanded";
     } else if (settings.cardContentMaxHeight === 'expand') {
@@ -64,11 +64,11 @@ const NoteContentView = ({ app, fileInfo }: { app: App, fileInfo: FileInfo }) =>
     } else {
       className += " card-note-content--normal";
     }
-    
+
     if (overflow && !isExpanded && settings.cardContentMaxHeight !== 'expand') {
       className += " card-note-content--overflow";
     }
-    
+
     return className;
   };
 
@@ -76,7 +76,7 @@ const NoteContentView = ({ app, fileInfo }: { app: App, fileInfo: FileInfo }) =>
     <div style={{ position: 'relative' }}>
       <div ref={ref} className={getContentClassName()} data-font-theme={settings.fontTheme} />
       {overflow && !isExpanded && settings.cardContentMaxHeight !== 'expand' && (
-        <div 
+        <div
           className="card-note-expand-button"
           onClick={handleExpandToggle}
         >
@@ -84,7 +84,7 @@ const NoteContentView = ({ app, fileInfo }: { app: App, fileInfo: FileInfo }) =>
         </div>
       )}
       {isExpanded && settings.cardContentMaxHeight !== 'expand' && (
-        <div 
+        <div
           className="card-note-expand-button"
           onClick={handleExpandToggle}
         >
@@ -99,7 +99,8 @@ const CardNote = ({ fileInfo }: { fileInfo: FileInfo }) => {
 
   const plugin = useCombineStore((state) => state.plugin);
   const settings = useCombineStore((state) => state.settings);
-  const isPinned = useCombineStore((state) => state.curScheme.pinned.includes(fileInfo.id));
+  // 使用 fileInfo.file.path 判断是否已置顶
+  const isPinned = useCombineStore((state) => state.curScheme.pinned.includes(fileInfo.file.path));
   const setCurScheme = useCombineStore((state) => state.setCurScheme);
   const app = plugin.app;
   const isCreated = settings.sortType === 'created' || settings.sortType === 'earliestCreated';
@@ -123,7 +124,7 @@ const CardNote = ({ fileInfo }: { fileInfo: FileInfo }) => {
         <div className="card-note-time">{isPinned ? `${i18n.t('general_pin')} · ` : ""}{isCreated ? i18n.t('created_at') : i18n.t('updated_at')} {new Date(isCreated ? fileInfo.file.stat.ctime : fileInfo.file.stat.mtime).toLocaleString()}</div>
         {shouldShowTitle(fileInfo.file.basename) && <div className="card-note-title"><h3>{fileInfo.file.basename}</h3></div>}
         {tags.length > 0 && <div className="card-note-tags"> {tags.map((tag) =>
-          <div className="card-note-tag" key={tag} onClick={()=>{
+          <div className="card-note-tag" key={tag} onClick={() => {
             const fs = createEmptySearchFilterScheme();
             fs.tagFilter.or = [[tag]];
             fs.name = '#' + tag;

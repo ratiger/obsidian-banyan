@@ -4,6 +4,7 @@ import { useViewSchemeStore, ViewSchemeState } from "./useViewSchemeStore";
 import { DashBoardState, useDashBoardStore } from "./useDashBoardStore";
 import { RandomReviewState, useRandomReviewStore } from "./useRandomReviewStore";
 import { SettingsState, useSettingsStore } from "./useSettingsStore";
+import { FileStoreState, useFileStore } from "./useFileStore";
 import BanyanPlugin from "src/BanyanPlugin";
 import { getDefaultFilterScheme } from "src/models/FilterScheme";
 
@@ -14,7 +15,7 @@ interface BaseState {
     setBacklinksMap: (map: { [key: string]: string[] }) => void;
 }
 
-export type CombineState = DashBoardState & FilterSchemeState & ViewSchemeState & RandomReviewState & SettingsState & BaseState;
+export type CombineState = DashBoardState & FilterSchemeState & ViewSchemeState & RandomReviewState & SettingsState & FileStoreState & BaseState;
 
 export const useCombineStore = create<CombineState>()((...a) => ({
     plugin: {} as BanyanPlugin,
@@ -36,4 +37,5 @@ export const useCombineStore = create<CombineState>()((...a) => ({
     ...useViewSchemeStore(...a),
     ...useRandomReviewStore(...a),
     ...useSettingsStore(...a),
+    ...useFileStore(...a),
 }));

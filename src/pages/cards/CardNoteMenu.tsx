@@ -37,8 +37,8 @@ export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenu
       item.setTitle(i18n.t('remove_from_view'));
       item.onClick(() => {
         if (curScheme.type !== 'ViewScheme') return;
-        const newFiles = [...curScheme.files.filter((fileID) => fileID !== fileInfo.id)];
-        const newPinned = [...curScheme.pinned.filter((fileID) => fileID !== fileInfo.id)];
+        const newFiles = [...curScheme.files.filter((file) => file !== fileInfo.file.path)];
+        const newPinned = [...curScheme.pinned.filter((file) => file !== fileInfo.file.path)];
         const newScheme = { ...curScheme, files: newFiles, pinned: newPinned };
         updateViewScheme(newScheme);
         setCurScheme(newScheme);
@@ -52,11 +52,11 @@ export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenu
         const modal = new ViewSelectModal(plugin.app, {
           viewSchemes: viewSchemes,
           onSelect: (scheme) => {
-            if (scheme.files.includes(fileInfo.id)) {
+            if (scheme.files.includes(fileInfo.file.path)) {
               new Notice(i18n.t('notice_note_already_in_view'));
               return;
             }
-            const newFiles = [...scheme.files, fileInfo.id];
+            const newFiles = [...scheme.files, fileInfo.file.path];
             const newScheme = { ...scheme, files: newFiles };
             updateViewScheme(newScheme);
           }
@@ -93,7 +93,7 @@ export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenu
           app: plugin.app,
           description: i18n.t('delete_note_confirm'),
           onConfirm: async () => {
-            updateWhenDeleteFile(fileInfo.id);
+            updateWhenDeleteFile(fileInfo.file.path);
             await plugin.fileUtils.trashFile(fileInfo.file);
             new Notice(i18n.t('notice_note_to_trash'));
           }

@@ -19,10 +19,10 @@ export interface DashBoardState {
     pinFile: (f: FileInfo, isPinned: boolean) => void;
 
     needRefresh: boolean;
-    editingFilesID: number[];
+    editingFilesPath: string[]; // 改为存储文件路径
     hasEditingFiles: () => boolean;
-    addEditingFile: (id: number) => void;
-    deleteEditingFile: (id: number) => void;
+    addEditingFile: (path: string) => void;
+    deleteEditingFile: (path: string) => void;
     resetEditingFiles: () => void;
 }
 
@@ -49,7 +49,7 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
         let filtered = allFiles;
         if (curScheme.type == 'FilterScheme') {
             // date range
-            filtered = filtered.filter(({file}) => {
+            filtered = filtered.filter(({ file }) => {
                 const timeToCheck = (sortType === 'created' || sortType === 'earliestCreated') ? file.stat.ctime : file.stat.mtime;
                 return withinDateRange(timeToCheck, curScheme.dateRange);
             });
@@ -70,9 +70,10 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
                 return isOKWithTagFilter(fileInfo.tags, curScheme.tagFilter);
             });
         } else if (curScheme.type == 'ViewScheme') {
-            filtered = filtered.filter(fileInfo => curScheme.files.includes(fileInfo.id));
+            // 现在的 files 存储的是 path string
+            filtered = filtered.filter(fileInfo => curScheme.files.includes(fileInfo.file.path));
         }
-        
+
         // 根据乱序浏览设置决定排序方式
         if (randomBrowse) {
             // 打乱数组顺序
@@ -101,15 +102,16 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
         const curSchemeFiles = get().curSchemeFiles;
         const files = curSchemeFiles.slice(0, endIndex);
         const displayFiles = files
-            .filter((f) => curScheme.pinned.includes(f.id))
-            .concat(files.filter((f) => !curScheme.pinned.includes(f.id)));
+            .filter((f) => curScheme.pinned.includes(f.file.path))
+            .concat(files.filter((f) => !curScheme.pinned.includes(f.file.path)));
         set({ displayFiles });
     },
     pinFile: (f: FileInfo, isPinned: boolean) => {
         const curScheme = get().curScheme;
         const viewSchemes = get().viewSchemes;
         const filterSchemes = get().filterSchemes;
-        const newPinned = [...curScheme.pinned.filter(p => p !== f.id)].concat(isPinned ? [f.id] : []);
+        // 使用 file.path
+        const newPinned = [...curScheme.pinned.filter(p => p !== f.file.path)].concat(isPinned ? [f.file.path] : []);
         const newScheme = { ...curScheme, pinned: newPinned };
         set({ curScheme: newScheme });
         if (newScheme.type === 'ViewScheme') {
@@ -128,27 +130,27 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
     },
 
     needRefresh: false,
-    editingFilesID: [],
-    hasEditingFiles: () => get().editingFilesID.length > 0,
-    addEditingFile: (id: number) => set(state => ({ editingFilesID: [...state.editingFilesID, id] })),
-    deleteEditingFile: (id: number) => {
-        const res = get().editingFilesID.filter(i => i !== id);
-        set({ editingFilesID: res });
+    editingFilesPath: [],
+    hasEditingFiles: () => get().editingFilesPath.length > 0,
+    addEditingFile: (path: string) => set(state => ({ editingFilesPath: [...state.editingFilesPath, path] })),
+    deleteEditingFile: (path: string) => {
+        const res = get().editingFilesPath.filter(i => i !== path);
+        set({ editingFilesPath: res });
         if (res.length === 0) {
             set({ needRefresh: true });
         }
     },
-    resetEditingFiles: () => set({ editingFilesID: [], needRefresh: false }),
+    resetEditingFiles: () => set({ editingFilesPath: [], needRefresh: false }),
 });
 
 const stripMarkdown = (mdStr: string) => {
     return mdStr
-      .replace(/(\*\*\*|__)(.*?)\1/g, '$2')  // 着重
-      .replace(/(\*\*|__)(.*?)\1/g, '$2')    // 加粗
-      .replace(/(\*|_)(.*?)\1/g, '$2')       // 斜体
-      .replace(/(==|__)(.*?)\1/g, '$2')      // 高亮
-      .replace(/~~(.*?)~~/g, '$1')           // 删除线
-      .replace(/`(.*?)`/g, '$1')             // 行内代码
-      .replace(/!?$$(.*?)$$$.*?$/g, '$1')    // 链接和图片
-      .replace(/^#+\s+/gm, '');              // 标题
-  }
+        .replace(/(\*\*\*|__)(.*?)\1/g, '$2')  // 着重
+        .replace(/(\*\*|__)(.*?)\1/g, '$2')    // 加粗
+        .replace(/(\*|_)(.*?)\1/g, '$2')       // 斜体
+        .replace(/(==|__)(.*?)\1/g, '$2')      // 高亮
+        .replace(/~~(.*?)~~/g, '$1')           // 删除线
+        .replace(/`(.*?)`/g, '$1')             // 行内代码
+        .replace(/!?$$(.*?)$$$.*?$/g, '$1')    // 链接和图片
+        .replace(/^#+\s+/gm, '');              // 标题
+}

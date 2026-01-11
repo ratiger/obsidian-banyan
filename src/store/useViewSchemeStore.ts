@@ -10,7 +10,6 @@ export interface ViewSchemeState {
     createViewScheme: (viewScheme: ViewScheme) => void;
     updateViewScheme: (viewScheme: ViewScheme) => void;
     deleteViewScheme: (id: number) => void;
-    updateWhenDeleteFile: (fileID: number) => void;
 
     updateViewSchemeList: (viewSchemes: ViewScheme[]) => void;
 }
@@ -29,23 +28,6 @@ export const useViewSchemeStore: StateCreator<CombineState, [], [], ViewSchemeSt
     },
     deleteViewScheme: (id: number) => {
         get().updateViewSchemeList(get().viewSchemes.filter((scheme) => scheme.id !== id));
-    },
-    updateWhenDeleteFile: (fileID: number) => {
-        const viewSchemes = get().viewSchemes;
-        const curScheme = get().curScheme;
-        const setCurScheme = get().setCurScheme;
-        const newSchemes = viewSchemes.map(scheme => {
-            const newFiles = scheme.files.filter((id) => id !== fileID);
-            const newPinned = scheme.pinned.filter((id) => id !== fileID);
-            return { ...scheme, files: newFiles, pinned: newPinned };
-        });
-        get().updateViewSchemeList(newSchemes);
-        if (curScheme.type == 'ViewScheme') {
-            const newScheme = newSchemes.filter(scheme => scheme.id == curScheme.id).first();
-            if (newScheme) {
-                setCurScheme(newScheme);
-            }
-        }
     },
 
     updateViewSchemeList: (viewSchemes: ViewScheme[]) => {

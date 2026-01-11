@@ -60,7 +60,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const app = plugin.app;
 
   const dashboardRef = React.useRef<HTMLDivElement>(null);
-  
+
   const requestData = useCombineStore((state) => state.requestData);
   const updateDisplayFiles = useCombineStore((state) => state.updateDisplayFiles);
   const curSchemeFiles = useCombineStore((state) => state.curSchemeFiles);
@@ -69,7 +69,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const filterSchemes = useCombineStore((state) => state.filterSchemes);
   const viewSchemes = useCombineStore((state) => state.viewSchemes);
   const setCurSchemeOriginal = useCombineStore((state) => state.setCurScheme);
-  
+
   // 包装 setCurScheme 函数，在切换 scheme 时滚动到顶部
   const setCurScheme = useCallback((scheme: any) => {
     setCurSchemeOriginal(scheme);
@@ -91,7 +91,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const notesPerPage = 10; // 每页显示的笔记数量
   const [colCount, setColCount] = useState(1);
-  
+
   const [refreshFlag, setRefreshFlag] = useState(0);
 
   // 文件监听逻辑
@@ -192,7 +192,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
     const modal = new ViewSelectModal(app, {
       viewSchemes: viewSchemes,
       onSelect: (scheme) => {
-        const temp = new Set<number>([...scheme.files, ...displayFiles.map((f) => f.id)]);
+        const temp = new Set<string>([...scheme.files, ...displayFiles.map((f) => f.file.path)]);
         const newFiles = Array.from(temp);
         const newScheme = { ...scheme, files: newFiles };
         updateViewScheme(newScheme);
@@ -204,7 +204,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const cardNodes = displayFiles.map((f, index) => {
     const isLastCard = index === displayFiles.length - 1;
     return (
-      <div ref={isLastCard ? lastCardElementRef : null} key={f.id}>
+      <div ref={isLastCard ? lastCardElementRef : null} key={f.file.path}>
         {(!Platform.isMobile && settings.useCardNote2) ? <CardNote2 fileInfo={f} /> : <CardNote fileInfo={f} />}
       </div>
     );
@@ -225,7 +225,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
       {showSidebar != 'normal' && <Sidebar visible={showSidebar == 'show'} onClose={() => setShowSidebar('hide')}><SidebarContent /></Sidebar>}
       {showSidebar == 'normal' && <SidebarContent />}
       <div className="main-container">
-        <HeaderView 
+        <HeaderView
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
           curScheme={curScheme}

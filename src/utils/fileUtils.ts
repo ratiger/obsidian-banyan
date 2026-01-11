@@ -1,6 +1,6 @@
 import { App, TFile, normalizePath, Notice } from "obsidian";
 import BanyanPlugin from "src/main";
-import { createFileInfo, FileInfo, generateFileId } from "src/models/FileInfo";
+import { createFileInfo, FileInfo } from "src/models/FileInfo";
 import { TagFilter, isOKWithTagFilter } from "src/models/TagFilter";
 import { i18n } from "./i18n";
 import moment from "moment";
@@ -125,7 +125,7 @@ export class FileUtils {
     await this.ensureDirectoryExists(folderPath);
     const formatStr = this.getZkPrefixerFormat();
     let fileName: string = "";
-    
+
     // 如果有标题且标题合法，使用标题作为文件名
     if (title && title.trim() && legalFileName(title.trim())) {
       fileName = `${title.trim()}.md`;
@@ -137,10 +137,10 @@ export class FileUtils {
       } else {
         // 不赋值filename，则会使用默认格式
         new Notice(i18n.t('illegal_unique_prefix_format'));
-        console.log("formated illegal:", formatStr);        
+        console.log("formated illegal:", formatStr);
       }
     }
-    
+
     if (fileName === "") {
       const defaultFormatStr = "YYYY-MM-DD HH-mm-ss";
       fileName = `${moment().format(defaultFormatStr)}.md`;
@@ -171,7 +171,7 @@ export class FileUtils {
     }
 
     // 随机选择一个笔记
-    const randomIndex = getRandomNumber(filteredFiles.length-1);
+    const randomIndex = getRandomNumber(filteredFiles.length - 1);
     const randomFile = filteredFiles[randomIndex];
 
     // 打开笔记
@@ -186,9 +186,7 @@ export class FileUtils {
     const file = await this.app.vault.create(filePath, content ?? '');
 
     await this.app.fileManager.processFrontMatter(file, (frontmatter) => {
-      const id = generateFileId((new Date()).getTime());
-      frontmatter.tags = tags; 
-      frontmatter.id = id;
+      frontmatter.tags = tags;
     });
 
     if (!open) return;
