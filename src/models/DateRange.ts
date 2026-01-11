@@ -1,15 +1,19 @@
+import moment from "moment";
+
 export interface DateRange {
     from: string;
     to: string;
 }
 
 export const withinDateRange = (time: number, dateRange: DateRange) => {
-    const fromDate = dateRange.from.length > 0 ? (new Date(dateRange.from)) : undefined;
-    const toDate = dateRange.to.length > 0 ? (new Date(dateRange.to)) : undefined;
-    if (toDate) toDate.setDate(toDate.getDate() + 1); // 要加一天，因为 toDate 是包含的
+    const fromMoment = dateRange.from.length > 0 ? moment(dateRange.from, 'YYYY-MM-DD') : undefined;
+    const toMoment = dateRange.to.length > 0 ? moment(dateRange.to, 'YYYY-MM-DD') : undefined;
 
-    const from = fromDate ? fromDate.setHours(0, 0, 0, 0) : undefined;
-    const to = toDate ? toDate.setHours(0, 0, 0, 0) : undefined;
+    if (fromMoment) fromMoment.startOf('day');
+    if (toMoment) toMoment.add(1, 'days').startOf('day');
+
+    const from = fromMoment ? fromMoment.valueOf() : undefined;
+    const to = toMoment ? toMoment.valueOf() : undefined;
 
     if (!from && !to) return true;
     if (from && !to) return time >= from;

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { useMemo } from 'react';
 import CalendarHeatmap from 'react-calendar-heatmap';
 import { Tooltip } from 'react-tooltip'
@@ -15,8 +16,8 @@ export const Heatmap = ({ onCickDate }: {
     onCickDate: (date: string) => void
 }) => {
     const today = new Date();
-    const settings = useCombineStore((state) => state.settings);
-    const sortType = settings.sortType;    
+    const appData = useCombineStore((state) => state.appData);
+    const sortType = appData.sortType;
     const allFiles = useCombineStore((state) => state.allFiles);
     const values = useMemo(() => getHeatmapValues(allFiles, sortType), [allFiles, sortType]);
     return (
@@ -65,10 +66,8 @@ export const getHeatmapValues = (fileInfos: FileInfo[], sortType: SortType) => {
     const valueMap = fileInfos
         .map(f => f.file.stat)
         .map(stat => {
-            const date = new Date((sortType === 'created' || sortType === 'earliestCreated') ? stat.ctime : stat.mtime);
-            const offset = date.getTimezoneOffset();
-            date.setTime(date.getTime() - offset * 60 * 1000); // offset是毫秒，要变成小时
-            return date.toISOString().slice(0, 10);
+            const timestamp = (sortType === 'created' || sortType === 'earliestCreated') ? stat.ctime : stat.mtime;
+            return moment(timestamp).format('YYYY-MM-DD');
         })
         .reduce<Map<string, number>>(
             (pre, cur) => pre.set(cur, pre.has(cur) ? pre.get(cur)! + 1 : 1),
