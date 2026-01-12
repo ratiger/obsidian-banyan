@@ -153,68 +153,42 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
     if (node) observer.current.observe(node);
   }, [isLoading, loadMoreNotes]);
 
+  const updateLayout = useCallback((width?: number) => {
+    if (Platform.isMobile) {
+      setShowSidebar('hide');
+      setColCount(1);
+      return;
+    }
+
+    const containerWidth = width ?? dashboardRef.current?.clientWidth ?? 0;
+    if (containerWidth === 0) return;
+
+    const _showSidebar = containerWidth >= 920 ? 'normal' : 'hide';
+    setShowSidebar(_showSidebar);
+
+    if (cardsColumns == 1) {
+      setColCount(1);
+      return;
+    }
+
+    const mainWidth = containerWidth - (_showSidebar == 'normal' ? 400 : 0);
+    const cardWidth = 620;
+    const cardsPadding = 24;
+    const widthFor2Cols = cardWidth + cardsPadding + cardWidth;
+    const cnt = mainWidth >= widthFor2Cols ? 2 : 1;
+    setColCount(cnt);
+  }, [cardsColumns]);
+
   useEffect(() => {
-    const updateCol = () => {
-      if (Platform.isMobile) {
-        setShowSidebar('hide');
-        setColCount(1);
-        return;
-      }
-      if (!dashboardRef.current) return;
-      const containerWidth = dashboardRef.current.clientWidth;
-      const _showSidebar = containerWidth >= 920 ? 'normal' : 'hide'; // 920 是试验效果得来的
-      setShowSidebar(_showSidebar);
-      const currentSettings = useCombineStore.getState().settings;
-      const cardsColumns = currentSettings.cardsColumns;
-      if (cardsColumns == 1) {
-        setColCount(1);
-        return;
-      }
-      const mainWidth = containerWidth - (_showSidebar == 'normal' ? 400 : 0);
-      const cardWidth = 620;
-      const cardsPadding = 24;
-      const widthFor2Cols = cardWidth + cardsPadding + cardWidth;
-      const cnt = mainWidth >= widthFor2Cols ? 2 : 1;
-      setColCount(cnt);
-    };
+    // 初始计算
+    requestAnimationFrame(() => updateLayout());
 
-    // 初始化时执行一次，使用 requestAnimationFrame 避免阻塞
-    requestAnimationFrame(updateCol);
-
-    // 使用ResizeObserver监听主容器尺寸变化
     const resizeObserver = new ResizeObserver((entries) => {
-      window.requestAnimationFrame(() => {
-        if (!Array.isArray(entries) || !entries.length) return;
-        const entry = entries[0];
-        // Use contentRect.width to avoid forced reflow from clientWidth
-        const containerWidth = entry.contentRect.width;
+      if (!Array.isArray(entries) || !entries.length) return;
+      const entry = entries[0];
+      const containerWidth = entry.contentRect.width;
 
-        const update = () => {
-          if (Platform.isMobile) {
-            setShowSidebar('hide');
-            setColCount(1);
-            return;
-          }
-
-          const _showSidebar = containerWidth >= 920 ? 'normal' : 'hide'; // 920 是试验效果得来的
-          setShowSidebar(_showSidebar);
-
-          const currentSettings = useCombineStore.getState().settings;
-          const cardsColumns = currentSettings.cardsColumns;
-          if (cardsColumns == 1) {
-            setColCount(1);
-            return;
-          }
-
-          const mainWidth = containerWidth - (_showSidebar == 'normal' ? 400 : 0);
-          const cardWidth = 620;
-          const cardsPadding = 24;
-          const widthFor2Cols = cardWidth + cardsPadding + cardWidth;
-          const cnt = mainWidth >= widthFor2Cols ? 2 : 1;
-          setColCount(cnt);
-        };
-        update();
-      });
+      requestAnimationFrame(() => updateLayout(containerWidth));
     });
 
     if (dashboardRef.current) {
@@ -222,7 +196,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
     }
 
     return () => resizeObserver.disconnect();
-  }, [cardsColumns]);
+  }, [updateLayout]);
 
   const handleBatchImportToView = () => {
     const modal = new ViewSelectModal(app, {
