@@ -1,5 +1,9 @@
 ### Changelog
 
+### 1.4.1
+
+Fix: Extra padding of card note view on mobile.
+
 ### 1.4.0
 
 ⚠️ **Breaking Change**
