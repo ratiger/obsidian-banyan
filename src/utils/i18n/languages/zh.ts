@@ -62,7 +62,7 @@ export default {
     setting_header_basic: "⚙️ 基础设置",
     setting_header_cards: "🗂 卡片视图",
     setting_header_editor: "✏️ 新建笔记",
-    setting_header_clean: "⚠️ 旧版数据清理",
+    setting_header_clean: "⚠️ 旧版清理",
 
     setting_note_directory_name: "笔记目录",
     setting_note_directory_desc1: "「卡片面板」只会管理该目录下的所有笔记。",
@@ -109,11 +109,11 @@ export default {
     setting_card_content_max_height_normal: "一般",
     setting_card_content_max_height_expand: "不折叠",
 
-    setting_enable_view_schemes_name: "启用「视图空间」",
-    setting_enable_view_schemes_desc: "是否在侧边栏显示并在后台启用「视图空间」功能。",
-    
-    setting_enable_random_review_name: "启用「随机回顾」",
-    setting_enable_random_review_desc: "是否在侧边栏显示并在后台启用「随机回顾」功能。",
+    setting_enable_view_schemes_name: "启用「视图空间」功能",
+    setting_enable_view_schemes_desc: "该功能的使用场景更多被「筛选方案」替代了，故正考虑下掉该功能。",
+
+    setting_enable_random_review_name: "启用「随机回顾」功能",
+    setting_enable_random_review_desc: "该功能的使用场景更多被「乱序浏览」替代了，故正考虑下掉该功能。",
 
     // 字体
     setting_font_theme_name: "内容区域字体大小",
@@ -236,4 +236,18 @@ export default {
     loading_text: "加载中...",
     reached_bottom: "你已经到底部了",
 
+    /* Announcement Modal */
+    announcement_welcome_title: "欢迎使用 Banyan",
+    announcement_update_title: "Banyan 更新日志",
+    announcement_get_started: "开始使用",
+    announcement_close: "关闭",
+
+    /* 设置 - 帮助 */
+    setting_header_help: "❓ 帮助",
+    setting_show_welcome_name: "新手指引",
+    setting_show_welcome_desc: "关于 Banyan 的使用说明。",
+    setting_show_welcome_btn: "查看",
+    setting_show_update_name: "更新日志",
+    setting_show_update_desc: "所有版本的更新内容。",
+    setting_show_update_btn: "查看",
 };

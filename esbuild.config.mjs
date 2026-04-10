@@ -53,6 +53,9 @@ const jsContext = await esbuild.context({
 	treeShaking: true,
 	outfile: "dist/main.js",
 	minify: prod,
+	loader: {
+		".md": "text",
+	},
 	plugins: [copyPlugin],
 });
 

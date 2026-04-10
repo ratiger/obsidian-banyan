@@ -1,4 +1,14 @@
-### Changelog
+# Changelog
+
+### 1.4.3
+
+Improvements
+
+- Now we have guidance pop-up and changelog pop-up, which can also be viewed in the settings panel.
+- Now we add switches for "Random Review" and "View Scheme" in the setting. If you have been using these features, all remains the same; otherwise, they are disabled by default. These two features may be considered for removal in later version.
+- We optimized the refresh logic of the card panel. Now Adding or editing notes will no longer cause a full refresh of the card panel.
+- Fixed the extra blank block appeared in the search box on mobile.
+- Optimized some styles.
 
 ### 1.4.2
 

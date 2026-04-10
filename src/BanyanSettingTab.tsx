@@ -6,6 +6,8 @@ import { useCombineStore } from './store';
 import { CardContentMaxHeightType, FontTheme, NewNoteLocationMode } from './models/Enum';
 import { openMigrateTitleModal } from './components/MigrateTitleModal';
 import { openRemoveIdModal } from './components/RemoveIdModal';
+import { AnnouncementModal } from './components/AnnouncementModal';
+import { getWelcomeMarkdown, getChangelogMarkdown } from './utils/announcements';
 
 export class BanyanSettingTab extends PluginSettingTab {
 	plugin: BanyanPlugin;
@@ -23,8 +25,6 @@ export class BanyanSettingTab extends PluginSettingTab {
 		this.setupCardsDirectorySetting(containerEl);
 		this.setupOpenWhenStartObsidianSetting(containerEl);
 		this.setupCardsColumnsSetting(containerEl);
-		this.setupEnableViewSchemesSetting(containerEl);
-		this.setupEnableRandomReviewSetting(containerEl);
 
 		// 卡片视图
 		new Setting(containerEl).setName(i18n.t('setting_header_cards')).setHeading();
@@ -40,10 +40,17 @@ export class BanyanSettingTab extends PluginSettingTab {
 		this.setupUseZkPrefixerFormatSetting(containerEl);
 		this.setupShowAddNoteRibbonSetting(containerEl);
 
+		// 帮助
+		new Setting(containerEl).setName(i18n.t('setting_header_help')).setHeading();
+		this.setupHelpSetting(containerEl);
+
 		// 旧版清理
 		new Setting(containerEl).setName(i18n.t('setting_header_clean')).setHeading();
+		this.setupEnableViewSchemesSetting(containerEl);
+		this.setupEnableRandomReviewSetting(containerEl);
 		this.setupMigrateTitleToFilenameSetting(containerEl);
 	}
+
 
 	setupCardsDirectorySetting(containerEl: HTMLElement) {
 		const dateDesc = document.createDocumentFragment();
@@ -284,6 +291,35 @@ export class BanyanSettingTab extends PluginSettingTab {
 				btn.setButtonText(i18n.t('setting_remove_id_btn'))
 					.onClick(async () => {
 						openRemoveIdModal({ app: this.app, plugin: this.plugin });
+					});
+			});
+	}
+
+	setupHelpSetting(containerEl: HTMLElement) {
+		new Setting(containerEl)
+			.setName(i18n.t('setting_show_welcome_name'))
+			.setDesc(i18n.t('setting_show_welcome_desc'))
+			.addButton(btn => {
+				btn.setButtonText(i18n.t('setting_show_welcome_btn'))
+					.onClick(async () => {
+						const modal = new AnnouncementModal(this.app, {
+							type: 'welcome',
+							content: getWelcomeMarkdown()
+						});
+						modal.open();
+					});
+			});
+		new Setting(containerEl)
+			.setName(i18n.t('setting_show_update_name'))
+			.setDesc(i18n.t('setting_show_update_desc'))
+			.addButton(btn => {
+				btn.setButtonText(i18n.t('setting_show_update_btn'))
+					.onClick(async () => {
+						const modal = new AnnouncementModal(this.app, {
+							type: 'update',
+							content: getChangelogMarkdown()
+						});
+						modal.open();
 					});
 			});
 	}

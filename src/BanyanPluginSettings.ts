@@ -24,6 +24,8 @@ export interface BanyanPluginSettings {
 	enableViewSchemes?: boolean;
 	enableRandomReview?: boolean;
 
+	// meta
+	lastVersion?: string;
 }
 
 export const CUR_SETTINGS_VERSION = 9;
@@ -52,4 +54,5 @@ export const DEFAULT_SETTINGS: BanyanPluginSettings = {
 
 	enableViewSchemes: false,
 	enableRandomReview: false,
+	lastVersion: '',
 }

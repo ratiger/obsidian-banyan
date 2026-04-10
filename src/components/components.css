@@ -247,3 +247,51 @@
   cursor: pointer;
   transition: box-shadow 0.2s, background 0.2s;
 }
+
+/* 公告弹窗 */
+.announcement-modal {
+    max-width: 500px;
+}
+
+.announcement-container {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.announcement-content {
+    line-height: 1.6;
+    max-height: 65vh;
+    overflow-y: auto;
+    padding-right: 12px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.announcement-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+}
+
+.announcement-content h1:first-child {
+    margin-top: 0;
+    text-align: center;
+    color: var(--text-accent);
+}
+
+.announcement-content h3 {
+    margin-top: 1.5em;
+    border-bottom: 1px solid var(--background-modifier-border);
+    padding-bottom: 0.3em;
+}
+
+.announcement-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.announcement-btn {
+    width: 100%;
+    padding: 10px !important;
+    font-weight: bold !important;
+}

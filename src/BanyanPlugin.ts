@@ -1,11 +1,13 @@
 import { Plugin, WorkspaceLeaf } from 'obsidian';
 import { BanyanPluginSettings, DEFAULT_SETTINGS, CUR_SETTINGS_VERSION } from './BanyanPluginSettings';
-import { BanyanAppData, DEFAULT_APP_DATA, CUR_APP_DATA_VERSION } from './BanyanAppData';
+import { BanyanAppData, DEFAULT_APP_DATA } from './BanyanAppData';
 import { CARD_DASHBOARD_VIEW_TYPE, CardDashboard } from './pages/CardDashboard';
 import { BanyanSettingTab } from './BanyanSettingTab';
 import { FileUtils } from './utils/fileUtils';
 import { i18n } from './utils/i18n';
 import { TagFilter, isEmptyTagFilter } from './models/TagFilter';
+import { AnnouncementModal } from './components/AnnouncementModal';
+import { getWelcomeMarkdown, getChangelogMarkdown } from './utils/announcements';
 
 
 export default class BanyanPlugin extends Plugin {
@@ -82,6 +84,44 @@ export default class BanyanPlugin extends Plugin {
 		});
 	}
 
+	checkAnnouncements = async () => {
+		const curVersion = this.manifest.version;
+		const lastVersion = this.settings.lastVersion;
+		const settingVersion = this.settings.settingsVersion;
+
+		if ((!lastVersion || lastVersion === '') && settingVersion === CUR_SETTINGS_VERSION) {
+			// 初次启动
+			const modal = new AnnouncementModal(this.app, {
+				type: 'welcome',
+				content: getWelcomeMarkdown(),
+				onClose: () => {
+					this.settings.lastVersion = curVersion;
+					this.saveSettings();
+				}
+			});
+			modal.open();
+		} else if (lastVersion !== curVersion) {
+			// 版本更新
+			const updateContent = getChangelogMarkdown();
+			if (updateContent && updateContent.trim().length > 0) {
+				const modal = new AnnouncementModal(this.app, {
+					type: 'update',
+					content: updateContent,
+					onClose: () => {
+						this.settings.lastVersion = curVersion;
+						this.saveSettings();
+					}
+				});
+				modal.open();
+			} else {
+				// 如果当前版本没有更新公告，也更新版本号，避免重复检查
+				this.settings.lastVersion = curVersion;
+				await this.saveSettings();
+			}
+		}
+	}
+
+
 	onunload() {
 		// do nothing
 	}
@@ -120,7 +160,7 @@ export default class BanyanPlugin extends Plugin {
 
 	setupRandomReview = () => {
 		if (!this.settings.enableRandomReview) return;
-		
+
 		const icons = ['dice', 'shuffle', 'dices', 'dice-6',
 			'dice-5', 'dice-4', 'dice-3', 'dice-2', 'dice-1'];
 		this.randomRibbonIcons = [];
@@ -143,7 +183,7 @@ export default class BanyanPlugin extends Plugin {
 		});
 	}
 
-	updateSettingIfNeeded = async () => {
+	updateSettingIfNeeded = () => {
 		// *** 版本更新时，在以下添加更新逻辑 ***
 		if (this.settings.settingsVersion < 2) {
 			const getNewFilterIfNeeded = (tf: TagFilter) => {
@@ -199,7 +239,7 @@ export default class BanyanPlugin extends Plugin {
 		}
 		if (this.settings.settingsVersion < 9) {
 			const usedViewSchemes = this.appData.viewSchemes && this.appData.viewSchemes.length > 0;
-			
+
 			let usedRandomReview = false;
 			if (this.appData.randomReviewFilters && this.appData.randomReviewFilters.length > 0) {
 				if (this.appData.randomReviewFilters.length > 1) {
@@ -212,8 +252,8 @@ export default class BanyanPlugin extends Plugin {
 			this.settings.enableViewSchemes = usedViewSchemes;
 			this.settings.enableRandomReview = usedRandomReview;
 		}
+		this.checkAnnouncements();
 		this.settings.settingsVersion = CUR_SETTINGS_VERSION;
-		this.appData.version = CUR_APP_DATA_VERSION;
 		this.updateSavedFile();
 		this.saveSettings();
 		this.saveAppData();
@@ -276,7 +316,6 @@ export default class BanyanPlugin extends Plugin {
 
 			if (migrated) {
 				console.log('Detected legacy settings, migrated to appData');
-				this.appData.version = CUR_APP_DATA_VERSION;
 				await this.saveAppData();
 				await this.saveSettings();
 			}

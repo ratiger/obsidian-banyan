@@ -108,10 +108,10 @@ export default {
     setting_card_content_max_height_expand: "Expand",
 
     setting_enable_view_schemes_name: "Enable \"View schemes\"",
-    setting_enable_view_schemes_desc: "Whether to display and enable the \"View schemes\" feature in the sidebar.",
-    
+    setting_enable_view_schemes_desc: "Most of the use cases of this feature are replaced by \"Filter schemes\". So we are considering removing it.",
+
     setting_enable_random_review_name: "Enable \"Random review\"",
-    setting_enable_random_review_desc: "Whether to display and enable the \"Random review\" feature in the sidebar.",
+    setting_enable_random_review_desc: "Most of the use cases of this feature are replaced by \"Random browse\". So we are considering removing it.",
 
     // font
     setting_font_theme_name: "Font size",
@@ -234,4 +234,18 @@ export default {
     loading_text: "Loading...",
     reached_bottom: "You have reached the bottom.~",
 
+    /* Announcement Modal */
+    announcement_welcome_title: "Welcome to Banyan",
+    announcement_update_title: "What's New in Banyan",
+    announcement_get_started: "Get Started",
+    announcement_close: "Close",
+
+    /* Settings - Help */
+    setting_header_help: "❓ Help",
+    setting_show_welcome_name: "Tutorial",
+    setting_show_welcome_desc: "About Banyan usage.",
+    setting_show_welcome_btn: "View",
+    setting_show_update_name: "Changelog",
+    setting_show_update_desc: "All versions changelog.",
+    setting_show_update_btn: "View",
 };
