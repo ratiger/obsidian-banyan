@@ -13,6 +13,7 @@ import { HeaderView } from "./header/HeaderView";
 import EmptyStateCard from "./cards/EmptyStateCard";
 import { ViewSelectModal } from "./sidebar/viewScheme/ViewSelectModal";
 import { createFileWatcher } from 'src/utils/fileWatcher';
+import { FileInfo } from 'src/models/FileInfo';
 import { useDashboardLayout } from 'src/hooks/useDashboardLayout';
 import { useInfiniteScroll } from 'src/hooks/useInfiniteScroll';
 import AddNoteView from "./header/AddNoteView";
@@ -105,16 +106,26 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
 
   const [refreshFlag, setRefreshFlag] = useState(0);
 
+  const updateSingleFile = useCombineStore((state) => state.updateSingleFile);
+  const removeSingleFile = useCombineStore((state) => state.removeSingleFile);
+  const updateWhenDeleteFile = useCombineStore((state) => state.updateWhenDeleteFile);
+
   // 文件监听逻辑
   useEffect(() => {
     const watcher = createFileWatcher(plugin);
-    const unsubscribe = watcher.onChange(({ type }) => {
-      if (type === 'create' || type === 'delete') {
+    const unsubscribe = watcher.onChange(({ type, fileInfo }) => {
+      if (type === 'create') {
+        // 新文件需要全量刷新（要重新过滤/排序）
         setRefreshFlag(f => f + 1);
-      }
-      if (type === 'modify' || type === 'meta-change') {
-        if (!hasEditingFiles()) {
-          setRefreshFlag(f => f + 1);
+      } else if (type === 'delete') {
+        // 删除文件：增量移除，不刷新整个面板
+        const path = 'path' in fileInfo ? fileInfo.path : fileInfo.file.path;
+        removeSingleFile(path);
+        updateWhenDeleteFile(path);
+      } else if (type === 'modify' || type === 'meta-change') {
+        // 修改/元数据变化：仅更新受影响的单个文件
+        if (!hasEditingFiles() && 'tags' in fileInfo) {
+          updateSingleFile(fileInfo as FileInfo);
         }
       }
     });

@@ -18,6 +18,10 @@ export interface DashBoardState {
     updateDisplayFiles: (endIndex: number) => void;
     pinFile: (f: FileInfo, isPinned: boolean) => void;
 
+    // 单文件增量更新（避免全量刷新）
+    updateSingleFile: (fileInfo: FileInfo) => void;
+    removeSingleFile: (path: string) => void;
+
     needRefresh: boolean;
     editingFilesPath: string[]; // 改为存储文件路径
     hasEditingFiles: () => boolean;
@@ -128,6 +132,32 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
             });
             get().updateFilterSchemeList(newSchemes);
         }
+    },
+
+    // 单文件增量更新：仅替换发生变化的 FileInfo，不重新加载所有文件
+    updateSingleFile: (fileInfo: FileInfo) => {
+        const path = fileInfo.file.path;
+
+        const replaceInArray = (arr: FileInfo[]) => {
+            const idx = arr.findIndex(f => f.file.path === path);
+            if (idx === -1) return arr; // 不在当前列表中，无需更新
+            const newArr = [...arr];
+            newArr[idx] = fileInfo;
+            return newArr;
+        };
+
+        const curSchemeFiles = replaceInArray(get().curSchemeFiles);
+        const displayFiles = replaceInArray(get().displayFiles);
+        const allFiles = replaceInArray(get().allFiles);
+        set({ curSchemeFiles, displayFiles, allFiles });
+    },
+
+    // 单文件移除：仅从列表中移除被删除的文件
+    removeSingleFile: (path: string) => {
+        const curSchemeFiles = get().curSchemeFiles.filter(f => f.file.path !== path);
+        const displayFiles = get().displayFiles.filter(f => f.file.path !== path);
+        const allFiles = get().allFiles.filter(f => f.file.path !== path);
+        set({ curSchemeFiles, displayFiles, allFiles });
     },
 
     needRefresh: false,
