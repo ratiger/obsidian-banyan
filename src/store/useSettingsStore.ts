@@ -29,6 +29,8 @@ export interface SettingsState {
     updateFontTheme: (theme: FontTheme) => void;
     updateNewNoteLocationMode: (mode: NewNoteLocationMode) => void;
     updateCustomNewNoteLocation: (directory: string) => void;
+    updateEnableViewSchemes: (enable: boolean) => void;
+    updateEnableRandomReview: (enable: boolean) => void;
 
     // UI state updates
     updateFilterSchemesExpanded: (expanded: boolean) => void;
@@ -115,6 +117,15 @@ export const useSettingsStore: StateCreator<CombineState, [], [], SettingsState>
     },
     updateCustomNewNoteLocation: (directory: string) => {
         get().updateSettings({ customNewNoteLocation: directory });
+    },
+    updateEnableViewSchemes: (enable: boolean) => {
+        get().updateSettings({ enableViewSchemes: enable });
+    },
+    updateEnableRandomReview: (enable: boolean) => {
+        get().updateSettings({ enableRandomReview: enable });
+        const plugin = get().plugin;
+        plugin.resetRandomReview();
+        plugin.setupRandomReview();
     },
 
     // UI state updates

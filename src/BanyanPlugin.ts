@@ -5,7 +5,7 @@ import { CARD_DASHBOARD_VIEW_TYPE, CardDashboard } from './pages/CardDashboard';
 import { BanyanSettingTab } from './BanyanSettingTab';
 import { FileUtils } from './utils/fileUtils';
 import { i18n } from './utils/i18n';
-import { TagFilter } from './models/TagFilter';
+import { TagFilter, isEmptyTagFilter } from './models/TagFilter';
 
 
 export default class BanyanPlugin extends Plugin {
@@ -119,6 +119,8 @@ export default class BanyanPlugin extends Plugin {
 	}
 
 	setupRandomReview = () => {
+		if (!this.settings.enableRandomReview) return;
+		
 		const icons = ['dice', 'shuffle', 'dices', 'dice-6',
 			'dice-5', 'dice-4', 'dice-3', 'dice-2', 'dice-1'];
 		this.randomRibbonIcons = [];
@@ -192,7 +194,24 @@ export default class BanyanPlugin extends Plugin {
 			}
 		}
 
-		// *** 版本更新时，在以上添加更新逻辑 ***
+		if (this.settings.settingsVersion < 8) {
+			// version 8 added some settings without migration?
+		}
+		if (this.settings.settingsVersion < 9) {
+			const usedViewSchemes = this.appData.viewSchemes && this.appData.viewSchemes.length > 0;
+			
+			let usedRandomReview = false;
+			if (this.appData.randomReviewFilters && this.appData.randomReviewFilters.length > 0) {
+				if (this.appData.randomReviewFilters.length > 1) {
+					usedRandomReview = true;
+				} else {
+					usedRandomReview = !isEmptyTagFilter(this.appData.randomReviewFilters[0].tagFilter);
+				}
+			}
+
+			this.settings.enableViewSchemes = usedViewSchemes;
+			this.settings.enableRandomReview = usedRandomReview;
+		}
 		this.settings.settingsVersion = CUR_SETTINGS_VERSION;
 		this.appData.version = CUR_APP_DATA_VERSION;
 		this.updateSavedFile();

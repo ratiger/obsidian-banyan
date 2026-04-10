@@ -88,6 +88,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
 
   const cardsDirectory = useCombineStore((state) => state.settings.cardsDirectory);
   const useCardNote2 = useCombineStore((state) => state.settings.useCardNote2);
+  const enableViewSchemes = useCombineStore((state) => state.settings.enableViewSchemes);
 
   const sortType = useCombineStore((state) => state.appData.sortType) || 'created';
   const randomBrowse = useCombineStore((state) => state.appData.randomBrowse);
@@ -177,7 +178,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
             {cardNodes.length > 0 && <SortFilesButton />}
           </div>
           <div className="main-subheader-btn-section">
-            {curScheme.type != 'ViewScheme' && curScheme.id != DefaultFilterSchemeID && cardNodes.length > 0 && <button className="clickable-icon batch-add-button" onClick={handleBatchImportToView}>{i18n.t('batch_add_to_view')}</button>}
+            {enableViewSchemes && curScheme.type != 'ViewScheme' && curScheme.id != DefaultFilterSchemeID && cardNodes.length > 0 && <button className="clickable-icon batch-add-button" onClick={handleBatchImportToView}>{i18n.t('batch_add_to_view')}</button>}
           </div>
         </div>
         <div className="main-cards">

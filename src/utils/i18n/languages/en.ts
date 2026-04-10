@@ -107,6 +107,12 @@ export default {
     setting_card_content_max_height_normal: "Normal",
     setting_card_content_max_height_expand: "Expand",
 
+    setting_enable_view_schemes_name: "Enable \"View schemes\"",
+    setting_enable_view_schemes_desc: "Whether to display and enable the \"View schemes\" feature in the sidebar.",
+    
+    setting_enable_random_review_name: "Enable \"Random review\"",
+    setting_enable_random_review_desc: "Whether to display and enable the \"Random review\" feature in the sidebar.",
+
     // font
     setting_font_theme_name: "Font size",
     setting_font_theme_desc: "Base font size of content area in card view.",

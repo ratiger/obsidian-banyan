@@ -109,6 +109,12 @@ export default {
     setting_card_content_max_height_normal: "一般",
     setting_card_content_max_height_expand: "不折叠",
 
+    setting_enable_view_schemes_name: "启用「视图空间」",
+    setting_enable_view_schemes_desc: "是否在侧边栏显示并在后台启用「视图空间」功能。",
+    
+    setting_enable_random_review_name: "启用「随机回顾」",
+    setting_enable_random_review_desc: "是否在侧边栏显示并在后台启用「随机回顾」功能。",
+
     // 字体
     setting_font_theme_name: "内容区域字体大小",
     setting_font_theme_desc: "内容区域的基础字体大小。",

@@ -20,6 +20,7 @@ export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenu
   const curScheme = useCombineStore.getState().curScheme;
   const setCurScheme = useCombineStore.getState().setCurScheme;
   const updateWhenDeleteFile = useCombineStore.getState().updateWhenDeleteFile;
+  const enableViewSchemes = useCombineStore.getState().settings.enableViewSchemes;
   const isInView = curScheme.type === 'ViewScheme';
 
   const menu = new Menu();
@@ -115,7 +116,9 @@ export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenu
   };
 
   openNote();
-  isInView ? removeFromView() : addToView();
+  if (enableViewSchemes) {
+    isInView ? removeFromView() : addToView();
+  }
   pinNote();
   copyLink();
   menu.addSeparator();

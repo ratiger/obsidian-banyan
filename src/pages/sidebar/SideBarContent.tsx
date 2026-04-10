@@ -13,6 +13,7 @@ import { Platform } from 'obsidian';
 export const SidebarContent = () => {
     const setCurScheme = useCombineStore((state) => state.setCurScheme);
     const plugin = useCombineStore((state) => state.plugin);
+    const settings = useCombineStore((state) => state.settings);
 
     const handleClickDate = (date: string) => {
         setCurScheme({ ...SearchFilterScheme, name: date, dateRange: { from: date, to: date } });
@@ -34,9 +35,9 @@ export const SidebarContent = () => {
             <RandomBrowseSwitch />
             <div className="sidebar-margin-top" />
             <div className="sidebar-section-container">
-                <RandomReviewInfo />
+                {settings.enableRandomReview && <RandomReviewInfo />}
                 <FilterSchemesInfo />
-                <ViewSchemesInfo />
+                {settings.enableViewSchemes && <ViewSchemesInfo />}
             </div>
         </div>);
 }

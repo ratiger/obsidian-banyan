@@ -20,9 +20,13 @@ export interface BanyanPluginSettings {
 	newNoteLocationMode?: NewNoteLocationMode;
 	customNewNoteLocation?: string;
 
+	// features
+	enableViewSchemes?: boolean;
+	enableRandomReview?: boolean;
+
 }
 
-export const CUR_SETTINGS_VERSION = 8;
+export const CUR_SETTINGS_VERSION = 9;
 
 
 
@@ -46,4 +50,6 @@ export const DEFAULT_SETTINGS: BanyanPluginSettings = {
 	newNoteLocationMode: 'current',
 	customNewNoteLocation: '',
 
+	enableViewSchemes: false,
+	enableRandomReview: false,
 }

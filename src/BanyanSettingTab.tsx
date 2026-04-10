@@ -23,6 +23,8 @@ export class BanyanSettingTab extends PluginSettingTab {
 		this.setupCardsDirectorySetting(containerEl);
 		this.setupOpenWhenStartObsidianSetting(containerEl);
 		this.setupCardsColumnsSetting(containerEl);
+		this.setupEnableViewSchemesSetting(containerEl);
+		this.setupEnableRandomReviewSetting(containerEl);
 
 		// 卡片视图
 		new Setting(containerEl).setName(i18n.t('setting_header_cards')).setHeading();
@@ -107,6 +109,32 @@ export class BanyanSettingTab extends PluginSettingTab {
 					.setValue(settings.cardsColumns.toString())
 					.onChange(async (value) => {
 						useCombineStore.getState().updateCardsColumns(parseInt(value));
+					});
+			});
+	}
+
+	setupEnableViewSchemesSetting(containerEl: HTMLElement) {
+		const settings = useCombineStore.getState().settings;
+		new Setting(containerEl)
+			.setName(i18n.t('setting_enable_view_schemes_name'))
+			.setDesc(i18n.t('setting_enable_view_schemes_desc'))
+			.addToggle(toggle => {
+				toggle.setValue(settings.enableViewSchemes ?? false)
+					.onChange(async (value) => {
+						useCombineStore.getState().updateEnableViewSchemes(value);
+					});
+			});
+	}
+
+	setupEnableRandomReviewSetting(containerEl: HTMLElement) {
+		const settings = useCombineStore.getState().settings;
+		new Setting(containerEl)
+			.setName(i18n.t('setting_enable_random_review_name'))
+			.setDesc(i18n.t('setting_enable_random_review_desc'))
+			.addToggle(toggle => {
+				toggle.setValue(settings.enableRandomReview ?? false)
+					.onChange(async (value) => {
+						useCombineStore.getState().updateEnableRandomReview(value);
 					});
 			});
 	}
