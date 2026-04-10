@@ -4,7 +4,6 @@ import { StrictMode, useEffect, useState, useRef, useCallback, useMemo } from 'r
 import { Root, createRoot } from 'react-dom/client';
 import * as React from "react";
 import CardNote from "./cards/CardNote";
-import CardNote2 from "./cards/CardNote2";
 import { Icon } from "src/components/Icon";
 import Sidebar from "./sidebar/Sidebar";
 import { DefaultFilterSchemeID, getDefaultFilterScheme } from "src/models/FilterScheme";
@@ -185,9 +184,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
     const isPinned = curScheme.pinned.includes(f.file.path);
     return (
       <div ref={isLastCard ? lastCardElementRef : null} key={f.file.path}>
-        {(!Platform.isMobile && useCardNote2) ?
-          <CardNote2 fileInfo={f} isPinned={isPinned} /> :
-          <CardNote fileInfo={f} isPinned={isPinned} />}
+        <CardNote fileInfo={f} isPinned={isPinned} editable={!Platform.isMobile && useCardNote2} />
       </div>
     );
   }), [displayFiles, curScheme.pinned, lastCardElementRef, useCardNote2]);
