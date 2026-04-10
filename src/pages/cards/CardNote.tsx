@@ -10,7 +10,6 @@ import CardNoteBacklinksView from "./CardNoteBacklinksView";
 const NoteContentView = ({ app, fileInfo }: { app: App, fileInfo: FileInfo }) => {
   const ref = React.useRef<HTMLDivElement>(null);
   const leaf = React.useRef<any>(null);
-  if (!leaf.current) leaf.current = new (WorkspaceLeaf as any)(app);
   const [overflow, setOverflow] = React.useState(false);
   const [isExpanded, setIsExpanded] = React.useState(false);
   const cardContentMaxHeight = useCombineStore((state) => state.settings.cardContentMaxHeight);
@@ -20,6 +19,7 @@ const NoteContentView = ({ app, fileInfo }: { app: App, fileInfo: FileInfo }) =>
     const setupView = async () => {
       if (!ref.current) return;
       try {
+        if (!leaf.current) leaf.current = new (WorkspaceLeaf as any)(app);
         await (leaf.current as WorkspaceLeaf).openFile(fileInfo.file);
         if (!(leaf.current.view instanceof MarkdownView)) {
           console.log('视图初始化失败或类型不正确', fileInfo.file.name);

@@ -76,7 +76,8 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
             });
         } else if (curScheme.type == 'ViewScheme') {
             // 现在的 files 存储的是 path string
-            filtered = filtered.filter(fileInfo => curScheme.files.includes(fileInfo.file.path));
+            const fileSet = new Set(curScheme.files);
+            filtered = filtered.filter(fileInfo => fileSet.has(fileInfo.file.path));
         }
 
         // 根据乱序浏览设置决定排序方式
@@ -106,10 +107,13 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
         const curScheme = get().curScheme;
         const curSchemeFiles = get().curSchemeFiles;
         const files = curSchemeFiles.slice(0, endIndex);
-        const displayFiles = files
-            .filter((f) => curScheme.pinned.includes(f.file.path))
-            .concat(files.filter((f) => !curScheme.pinned.includes(f.file.path)));
-        set({ displayFiles });
+        const pinnedSet = new Set(curScheme.pinned);
+        const pinned: FileInfo[] = [];
+        const unpinned: FileInfo[] = [];
+        for (const f of files) {
+            (pinnedSet.has(f.file.path) ? pinned : unpinned).push(f);
+        }
+        set({ displayFiles: [...pinned, ...unpinned] });
     },
     pinFile: (f: FileInfo, isPinned: boolean) => {
         const curScheme = get().curScheme;
