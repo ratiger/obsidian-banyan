@@ -1,34 +1,27 @@
-import { ItemView, WorkspaceLeaf, Menu, Platform } from "obsidian";
+import { ItemView, WorkspaceLeaf, Platform } from "obsidian";
 import BanyanPlugin from "src/main";
-import { StrictMode, useEffect, useState, useRef, useCallback, useMemo } from 'react';
+import { StrictMode, useEffect, useState, useCallback, useMemo } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 import * as React from "react";
 import CardNote from "./cards/CardNote";
 import { Icon } from "src/components/Icon";
 import Sidebar from "./sidebar/Sidebar";
-import { DefaultFilterSchemeID, getDefaultFilterScheme } from "src/models/FilterScheme";
+import { DefaultFilterSchemeID } from "src/models/FilterScheme";
 import { SidebarContent } from "./sidebar/SideBarContent";
 import { HeaderView } from "./header/HeaderView";
 import EmptyStateCard from "./cards/EmptyStateCard";
 import { ViewSelectModal } from "./sidebar/viewScheme/ViewSelectModal";
-import { createFileWatcher } from 'src/utils/fileWatcher';
-import { FileInfo } from 'src/models/FileInfo';
+
 import { useDashboardLayout } from 'src/hooks/useDashboardLayout';
 import { useInfiniteScroll } from 'src/hooks/useInfiniteScroll';
 import AddNoteView from "./header/AddNoteView";
 import { i18n } from "src/utils/i18n";
 import { useCombineStore } from "src/store";
-import { SortType } from "src/models/Enum";
 import { SortFilesButton } from "./header/SortFilesButton";
 
-// 瀑布流布局辅助函数
-const getColumns = (cards: React.JSX.Element[], colCount: number) => {
-  const cols: React.JSX.Element[][] = Array.from({ length: colCount }, () => []);
-  cards.forEach((card, idx) => {
-    cols[idx % colCount].push(card);
-  });
-  return cols;
-};
+import { MasonryLayout } from "src/components/MasonryLayout";
+
+
 
 export const CARD_DASHBOARD_VIEW_TYPE = "dashboard-view";
 
@@ -91,11 +84,11 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const updateViewScheme = useCombineStore((state) => state.updateViewScheme);
   const curSchemeNotesLength = useCombineStore((state) => state.curSchemeFiles.length);
   const needRefresh = useCombineStore((state) => state.needRefresh);
-  const hasEditingFiles = useCombineStore((state) => state.hasEditingFiles);
   const resetEditingFiles = useCombineStore((state) => state.resetEditingFiles);
 
   const cardsDirectory = useCombineStore((state) => state.settings.cardsDirectory);
   const useCardNote2 = useCombineStore((state) => state.settings.useCardNote2);
+
   const sortType = useCombineStore((state) => state.appData.sortType) || 'created';
   const randomBrowse = useCombineStore((state) => state.appData.randomBrowse);
   const { showSidebar, setShowSidebar, colCount } = useDashboardLayout(dashboardRef);
@@ -104,35 +97,6 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const notesPerPage = 10; // 每页显示的笔记数量
 
   const [refreshFlag, setRefreshFlag] = useState(0);
-
-  const updateSingleFile = useCombineStore((state) => state.updateSingleFile);
-  const removeSingleFile = useCombineStore((state) => state.removeSingleFile);
-  const updateWhenDeleteFile = useCombineStore((state) => state.updateWhenDeleteFile);
-
-  // 文件监听逻辑
-  useEffect(() => {
-    const watcher = createFileWatcher(plugin);
-    const unsubscribe = watcher.onChange(({ type, fileInfo }) => {
-      if (type === 'create') {
-        // 新文件需要全量刷新（要重新过滤/排序）
-        setRefreshFlag(f => f + 1);
-      } else if (type === 'delete') {
-        // 删除文件：增量移除，不刷新整个面板
-        const path = 'path' in fileInfo ? fileInfo.path : fileInfo.file.path;
-        removeSingleFile(path);
-        updateWhenDeleteFile(path);
-      } else if (type === 'modify' || type === 'meta-change') {
-        // 修改/元数据变化：仅更新受影响的单个文件
-        if (!hasEditingFiles() && 'tags' in fileInfo) {
-          updateSingleFile(fileInfo as FileInfo);
-        }
-      }
-    });
-    return () => {
-      unsubscribe();
-      watcher.dispose();
-    };
-  }, [app]);
 
   const handleRefresh = useCallback(() => {
     setRefreshFlag(f => f + 1);
@@ -189,8 +153,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
     );
   }), [displayFiles, curScheme.pinned, lastCardElementRef, useCardNote2]);
 
-  // 瀑布流布局
-  const columns = useMemo(() => getColumns(cardNodes, colCount), [cardNodes, colCount]);
+  // removed getColumns
 
   return (
     <div className="dashboard-container" ref={dashboardRef}>
@@ -221,9 +184,9 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
           {cardNodes.length === 0 ? (
             <EmptyStateCard isSearch={curScheme.type == 'FilterScheme' && curScheme.id !== DefaultFilterSchemeID} />
           ) : (
-            columns.map((col, idx) => (
-              <div className="main-cards-column" key={idx}>{col}</div>
-            ))
+            <MasonryLayout columns={colCount}>
+              {cardNodes}
+            </MasonryLayout>
           )}
         </div>
         {/* Add loading and end-of-list indicators here */}

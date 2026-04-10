@@ -22,6 +22,23 @@ export default class BanyanPlugin extends Plugin {
 
 		this.fileUtils = new FileUtils(this.app, this);
 
+		const { createFileWatcher } = await import('./utils/fileWatcher');
+		const watcher = createFileWatcher(this);
+		watcher.onChange(({ type, fileInfo }) => {
+			const state = useCombineStore.getState();
+			if (type === 'create') {
+				useCombineStore.setState({ needRefresh: true });
+			} else if (type === 'delete') {
+				const path = 'path' in fileInfo ? (fileInfo as any).path : (fileInfo as any).file.path;
+				state.removeSingleFile(path);
+				state.updateWhenDeleteFile(path);
+			} else if (type === 'modify' || type === 'meta-change') {
+				if (!state.hasEditingFiles() && 'tags' in fileInfo) {
+					state.updateSingleFile(fileInfo as any);
+				}
+			}
+		});
+
 		// 注册自定义 view
 		this.registerView(
 			CARD_DASHBOARD_VIEW_TYPE,
