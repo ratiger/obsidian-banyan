@@ -75,10 +75,12 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const viewSchemes = useCombineStore((state) => state.viewSchemes);
   const setCurScheme = useCombineStore((state) => state.setCurScheme);
 
+  const mainContainerRef = React.useRef<HTMLDivElement>(null);
+
   // Scroll to top when scheme changes
   useEffect(() => {
-    if (dashboardRef.current) {
-      dashboardRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    if (mainContainerRef.current) {
+      mainContainerRef.current.scrollTo({ top: 0 });
     }
   }, [curScheme]);
   const updateViewScheme = useCombineStore((state) => state.updateViewScheme);
@@ -122,7 +124,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
 
   useEffect(() => {
     updateDisplayFiles(currentPage * notesPerPage);
-  }, [currentPage, curSchemeFiles]);
+  }, [currentPage, curSchemeFiles, updateDisplayFiles]);
 
   const loadMoreNotes = useCallback(() => {
     if (isLoading) return;
@@ -160,7 +162,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
     <div className="dashboard-container" ref={dashboardRef}>
       {showSidebar != 'normal' && <Sidebar visible={showSidebar == 'show'} onClose={() => setShowSidebar('hide')}><SidebarContent /></Sidebar>}
       {showSidebar == 'normal' && <SidebarContent />}
-      <div className="main-container">
+      <div className="main-container" ref={mainContainerRef}>
         <HeaderView
           showSidebar={showSidebar}
           setShowSidebar={setShowSidebar}
