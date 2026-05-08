@@ -30,6 +30,7 @@
     display: flex;
     gap: 16px;
     flex: 1;
+    margin: 4px;
   }
 
   .main-cards-column {

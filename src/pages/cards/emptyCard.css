@@ -6,7 +6,7 @@
     min-height: 320px;
     background: var(--background-secondary);
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.16);
     padding: 48px 24px;
     max-width: 620px;
     width: 100%;
