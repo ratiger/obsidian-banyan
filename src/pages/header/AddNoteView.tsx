@@ -144,7 +144,7 @@ const AddNoteView: React.FC<AddNoteViewProps> = ({ app, plugin, onAdd }) => {
           onFocus={() => setTagsFocused(true)}
           onBlur={() => setTagsFocused(false)}
         /></div>
-        <button className={`add-note-send-button ${focused ? 'clickable-icon' : ''}`}
+        <button className={`add-note-send-button ${focused ? '' : 'clickable-icon'}`}
           onClick={async () => {
             const file = await plugin.fileUtils.getPlaceholderFile();
             const body = await plugin.fileUtils.readFileContent(file);
@@ -163,7 +163,7 @@ const AddNoteView: React.FC<AddNoteViewProps> = ({ app, plugin, onAdd }) => {
             setTitle('');
             onAdd();
             new Notice(i18n.t('new_note_added'));
-          }}><Icon name="send-horizontal" size="l" color="var(--text-on-accent)" /></button>
+          }}><Icon name="send-horizontal" size="l" /></button>
       </div>
     </div>
   );

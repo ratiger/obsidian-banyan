@@ -90,12 +90,11 @@
 
 .add-note-send-button {
     padding: 6px 15px;
-    background: var(--interactive-accent);
-    color: var(--text-on-accent);
 }
 
 .add-note-send-button:hover {
     background: var(--interactive-accent);
+    --icon-color: var(--text-on-accent);
     opacity: 1.2;
     filter: brightness(1.1);
 }
