@@ -109,7 +109,7 @@
 
 .filter-name-container input[type="text"] {
     padding: 21px 20px;
-    background-color: var(--background-secondary);
+    background-color: var(--background-modifier-hover);
     border: none;
     outline: none;
     border-radius: 8px;
@@ -124,7 +124,7 @@
 
 .filter-keyword-container input[type="text"] {
     padding: 21px 20px;
-    background-color: var(--background-secondary);
+    background-color: var(--background-modifier-hover);
     border: none;
     outline: none;
     border-radius: 8px;
@@ -139,6 +139,11 @@
 .filter-date-container span {
     margin-left: 4px;
     margin-right: 4px;
+}
+
+.filter-date-container input[type="date"] {
+    background-color: var(--background-modifier-hover);
+    border: none;
 }
 
 .filter-tags-container {

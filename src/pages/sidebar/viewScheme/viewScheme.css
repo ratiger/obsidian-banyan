@@ -139,7 +139,7 @@
 .view-name-container input[type="text"] {
     border-radius: 8px;
     padding: 21px 10px;
-    background-color: var(--background-secondary);
+    background-color: var(--background-modifier-hover);
     border: none;
     outline: none;
 }

@@ -89,8 +89,8 @@
 }
 
 .random-review-name-container input[type="text"] {
-  padding: 21px 20px; 
-  background-color: var(--background-secondary);
+  padding: 21px 20px;
+  background-color: var(--background-modifier-hover);
   border: none;
   outline: none;
   border-radius: 8px;
