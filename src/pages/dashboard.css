@@ -42,6 +42,10 @@
 /* 移动设备 */
 @media (max-width: 767px) {
 
+  .workspace-leaf-content[data-type="dashboard-view"] .view-content {
+    padding-bottom: 0 !important;
+  }
+
   .main-container {
     width: 100%;
   }
