@@ -102,12 +102,12 @@
 
 .sidebar-btn-selectd {
     color: var(--text-normal);
-    background-color: var(--background-secondary-alt);
+    background-color: var(--background-modifier-active-hover);
 }
 
 .sidebar-btn-hover {
     color: var(--text-muted);
-    background-color: var(--background-secondary);
+    background-color: var(--background-modifier-hover);
 }
 
 .sidebar-btn-normal {
