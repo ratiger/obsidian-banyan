@@ -84,21 +84,22 @@ export const Searchbar = () => {
                 {showFilterBox && (
                     <div className="searchbar-mobile-filter-box">
                         <div className="searchbar-mobile-filter-box-title">{i18n.t('search_view_title')}</div>
-                        <input
-                            type="text"
-                            placeholder={i18n.t('search_input_placeholder')}
-                            value={tempFilterScheme.keyword}
-                            onChange={e => {
-                                const newKeyword = e.target.value;
-                                setTempFilterScheme(prev => ({ ...prev, keyword: newKeyword }));
-                            }}
-                            onKeyDown={e => {
-                                if (e.key === 'Enter') {
-                                    handleSearch();
-                                }
-                            }}
-                            className="searchbar-mobile-input"
-                        />
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                placeholder={i18n.t('search_input_placeholder')}
+                                value={tempFilterScheme.keyword}
+                                onChange={e => {
+                                    const newKeyword = e.target.value;
+                                    setTempFilterScheme(prev => ({ ...prev, keyword: newKeyword }));
+                                }}
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        handleSearch();
+                                    }
+                                }}
+                            />
+                        </div>
                         <SearchView
                             allTags={allTags}
                             filterScheme={tempFilterScheme}

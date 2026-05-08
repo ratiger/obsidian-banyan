@@ -56,11 +56,10 @@
     font-weight: var(--font-semibold);
 }
 
-.searchbar-mobile-input {
+.input-container input[type="text"] {
     background: var(--background-modifier-hover);
     border: none;
     outline: none;
-    flex: 1;
     margin-bottom: 16px;
 }
 
