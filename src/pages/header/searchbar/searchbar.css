@@ -43,7 +43,7 @@
     margin-top: 6px;
     right: 0;
     z-index: 10;
-    background: var(--background-modifier-form-field);
+    background: var(--background-primary);
     box-shadow: 0 2px 8px 4px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     padding: 16px;
@@ -112,7 +112,7 @@
     margin-top: 6px;
     right: 0;
     z-index: 10;
-    background: var(--background-modifier-form-field);
+    background: var(--background-primary);
     box-shadow: 0 2px 8px 4px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
     padding: 16px;
