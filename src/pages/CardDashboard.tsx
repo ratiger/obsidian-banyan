@@ -20,6 +20,7 @@ import { useCombineStore } from "src/store";
 import { SortFilesButton } from "./header/SortFilesButton";
 
 import { MasonryLayout } from "src/components/MasonryLayout";
+import { FileInfo } from "src/models/FileInfo";
 
 
 
@@ -67,9 +68,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const dashboardRef = React.useRef<HTMLDivElement>(null);
 
   const requestData = useCombineStore((state) => state.requestData);
-  const updateDisplayFiles = useCombineStore((state) => state.updateDisplayFiles);
   const curSchemeFiles = useCombineStore((state) => state.curSchemeFiles);
-  const displayFiles = useCombineStore((state) => state.displayFiles);
   const curScheme = useCombineStore((state) => state.curScheme);
   const filterSchemes = useCombineStore((state) => state.filterSchemes);
   const viewSchemes = useCombineStore((state) => state.viewSchemes);
@@ -77,16 +76,18 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
 
   const mainContainerRef = React.useRef<HTMLDivElement>(null);
 
-  // Scroll to top when scheme changes
-  useEffect(() => {
-    if (mainContainerRef.current) {
-      mainContainerRef.current.scrollTo({ top: 0 });
+  const queryKey = useMemo(() => {
+    if (curScheme.type === 'FilterScheme') {
+      return `${curScheme.id}-${curScheme.type}-${curScheme.keyword}-${JSON.stringify(curScheme.tagFilter)}-${JSON.stringify(curScheme.dateRange)}`;
+    } else {
+      return `${curScheme.id}-${curScheme.type}`;
     }
   }, [curScheme]);
+
   const updateViewScheme = useCombineStore((state) => state.updateViewScheme);
   const curSchemeNotesLength = useCombineStore((state) => state.curSchemeFiles.length);
-  const needRefresh = useCombineStore((state) => state.needRefresh);
   const resetEditingFiles = useCombineStore((state) => state.resetEditingFiles);
+  const regenerateRandomSeed = useCombineStore((state) => state.regenerateRandomSeed);
 
   const cardsDirectory = useCombineStore((state) => state.settings.cardsDirectory);
   const useCardNote2 = useCombineStore((state) => state.settings.useCardNote2);
@@ -102,8 +103,15 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   const [refreshFlag, setRefreshFlag] = useState(0);
 
   const handleRefresh = useCallback(() => {
+    regenerateRandomSeed();
     setRefreshFlag(f => f + 1);
-  }, []);
+  }, [regenerateRandomSeed]);
+
+  useEffect(() => {
+    if (mainContainerRef.current) {
+      mainContainerRef.current.scrollTo({ top: 0 });
+    }
+  }, [queryKey, randomBrowse]);
 
   useEffect(() => {
     const requestFiles = async () => {
@@ -114,17 +122,19 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
       setIsLoading(false);
     }
     requestFiles();
-  }, [sortType, curScheme, refreshFlag, cardsDirectory, randomBrowse]);
+  }, [sortType, queryKey, refreshFlag, cardsDirectory, randomBrowse]);
 
-  useEffect(() => {
-    if (needRefresh) {
-      setRefreshFlag(f => f + 1);
+  const displayFiles = useMemo(() => {
+    const endIndex = currentPage * notesPerPage;
+    const files = curSchemeFiles.slice(0, endIndex);
+    const pinnedSet = new Set(curScheme.pinned);
+    const pinned: FileInfo[] = [];
+    const unpinned: FileInfo[] = [];
+    for (const f of files) {
+      (pinnedSet.has(f.file.path) ? pinned : unpinned).push(f);
     }
-  }, [needRefresh]);
-
-  useEffect(() => {
-    updateDisplayFiles(currentPage * notesPerPage);
-  }, [currentPage, curSchemeFiles, updateDisplayFiles]);
+    return [...pinned, ...unpinned];
+  }, [curSchemeFiles, curScheme.pinned, currentPage]);
 
   const loadMoreNotes = useCallback(() => {
     if (isLoading) return;
@@ -177,7 +187,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
               <Icon name="refresh-ccw" />
             </div>
             <span className="main-subheader-loaded-notes">{i18n.t('loaded_notes', { count: `${displayFiles.length}`, total: `${curSchemeNotesLength}` })}</span>
-            {cardNodes.length > 0 && <SortFilesButton />}
+            {cardNodes.length > 0 && !randomBrowse && <SortFilesButton />}
           </div>
           <div className="main-subheader-btn-section">
             {enableViewSchemes && curScheme.type != 'ViewScheme' && curScheme.id != DefaultFilterSchemeID && cardNodes.length > 0 && <button className="clickable-icon batch-add-button" onClick={handleBatchImportToView}>{i18n.t('batch_add_to_view')}</button>}

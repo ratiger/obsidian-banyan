@@ -1,4 +1,4 @@
-import { Plugin, WorkspaceLeaf } from 'obsidian';
+import { Plugin, TFile, WorkspaceLeaf } from 'obsidian';
 import { BanyanPluginSettings, DEFAULT_SETTINGS, CUR_SETTINGS_VERSION } from './BanyanPluginSettings';
 import { BanyanAppData, DEFAULT_APP_DATA } from './BanyanAppData';
 import { CARD_DASHBOARD_VIEW_TYPE, CardDashboard } from './pages/CardDashboard';
@@ -8,6 +8,7 @@ import { i18n } from './utils/i18n';
 import { TagFilter, isEmptyTagFilter } from './models/TagFilter';
 import { AnnouncementModal } from './components/AnnouncementModal';
 import { getWelcomeMarkdown, getChangelogMarkdown } from './utils/announcements';
+import { FileInfo } from './models/FileInfo';
 
 
 export default class BanyanPlugin extends Plugin {
@@ -26,18 +27,24 @@ export default class BanyanPlugin extends Plugin {
 
 		const { createFileWatcher } = await import('./utils/fileWatcher');
 		const watcher = createFileWatcher(this);
-		watcher.onChange(({ type, fileInfo }) => {
+		let requestDataTimer: any = null;
+		watcher.onChange(({ type, fileInfo, oldPath }) => {
 			const state = useCombineStore.getState();
-			if (type === 'create') {
-				useCombineStore.setState({ needRefresh: true });
-			} else if (type === 'delete') {
+			if (type === 'delete') {
 				const path = 'path' in fileInfo ? (fileInfo as any).path : (fileInfo as any).file.path;
-				state.removeSingleFile(path);
 				state.updateWhenDeleteFile(path);
-			} else if (type === 'modify' || type === 'meta-change') {
-				if (!state.hasEditingFiles() && 'tags' in fileInfo) {
-					state.updateSingleFile(fileInfo as any);
+			} else if (type === 'rename') {
+				if (oldPath) {
+					const path = 'file' in fileInfo ? (fileInfo as FileInfo).file.path : (fileInfo as TFile).path;
+					state.updateWhenRenameFile(oldPath, path);
 				}
+			}
+
+			if (!state.hasEditingFiles()) {
+				if (requestDataTimer) clearTimeout(requestDataTimer);
+				requestDataTimer = setTimeout(() => {
+					state.requestData();
+				}, 100);
 			}
 		});
 

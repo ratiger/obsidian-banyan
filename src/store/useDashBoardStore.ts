@@ -12,24 +12,30 @@ export interface DashBoardState {
     allTags: string[];
     curSchemeFiles: FileInfo[];
     curScheme: FilterScheme | ViewScheme;
-    displayFiles: FileInfo[];
 
     setCurScheme: (scheme: FilterScheme | ViewScheme) => void;
     requestData: () => Promise<void>;
-    updateDisplayFiles: (endIndex: number) => void;
     pinFile: (f: FileInfo, isPinned: boolean) => void;
 
-    // 单文件增量更新（避免全量刷新）
-    updateSingleFile: (fileInfo: FileInfo) => void;
-    removeSingleFile: (path: string) => void;
 
     needRefresh: boolean;
     editingFilesPath: string[]; // 改为存储文件路径
     hasEditingFiles: () => boolean;
     addEditingFile: (path: string) => void;
-    deleteEditingFile: (path: string) => void;
+    deleteEditingFile: (path: string) => Promise<void>;
     resetEditingFiles: () => void;
+    randomSeed: string;
+    regenerateRandomSeed: () => void;
 }
+
+function hashString(str: string): number {
+    let hash = 5381;
+    for (let i = 0; i < str.length; i++) {
+        hash = (hash * 33) ^ str.charCodeAt(i);
+    }
+    return hash >>> 0;
+}
+
 
 export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardState> = (set, get) => ({
 
@@ -38,14 +44,14 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
     allTags: [],
     curSchemeFiles: [],
     curScheme: createEmptyFilterScheme(),
-    displayFiles: [],
+    randomSeed: "",
+
 
     setCurScheme(scheme: FilterScheme | ViewScheme) {
-        set({ curScheme: scheme, editingFilesPath: [], needRefresh: false });
+        set({ curScheme: scheme, editingFilesPath: [], needRefresh: false, randomSeed: Math.random().toString() });
     },
     requestData: async () => {
         const plugin = get().plugin;
-        const settings = get().settings;
         const appData = get().appData;
         const sortType = appData.sortType;
         const randomBrowse = appData.randomBrowse;
@@ -83,8 +89,12 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
 
         // 根据乱序浏览设置决定排序方式
         if (randomBrowse) {
-            // 打乱数组顺序
-            filtered.sort(() => Math.random() - 0.5);
+            let seed = get().randomSeed;
+            if (!seed) {
+                seed = Math.random().toString();
+                set({ randomSeed: seed });
+            }
+            filtered.sort((a, b) => hashString(a.file.path + seed) - hashString(b.file.path + seed));
         } else {
             // 按排序类型排序
             filtered.sort((a, b) => {
@@ -104,18 +114,7 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
         }
         set({ allFiles, allTags, curSchemeFiles: filtered });
     },
-    updateDisplayFiles: (endIndex: number) => {
-        const curScheme = get().curScheme;
-        const curSchemeFiles = get().curSchemeFiles;
-        const files = curSchemeFiles.slice(0, endIndex);
-        const pinnedSet = new Set(curScheme.pinned);
-        const pinned: FileInfo[] = [];
-        const unpinned: FileInfo[] = [];
-        for (const f of files) {
-            (pinnedSet.has(f.file.path) ? pinned : unpinned).push(f);
-        }
-        set({ displayFiles: [...pinned, ...unpinned] });
-    },
+
     pinFile: (f: FileInfo, isPinned: boolean) => {
         const curScheme = get().curScheme;
         const viewSchemes = get().viewSchemes;
@@ -139,43 +138,19 @@ export const useDashBoardStore: StateCreator<CombineState, [], [], DashBoardStat
         }
     },
 
-    // 单文件增量更新：仅替换发生变化的 FileInfo，不重新加载所有文件
-    updateSingleFile: (fileInfo: FileInfo) => {
-        const path = fileInfo.file.path;
-
-        const replaceInArray = (arr: FileInfo[]) => {
-            const idx = arr.findIndex(f => f.file.path === path);
-            if (idx === -1) return arr; // 不在当前列表中，无需更新
-            const newArr = [...arr];
-            newArr[idx] = fileInfo;
-            return newArr;
-        };
-
-        const curSchemeFiles = replaceInArray(get().curSchemeFiles);
-        const displayFiles = replaceInArray(get().displayFiles);
-        const allFiles = replaceInArray(get().allFiles);
-        set({ curSchemeFiles, displayFiles, allFiles });
-    },
-
-    // 单文件移除：仅从列表中移除被删除的文件
-    removeSingleFile: (path: string) => {
-        const curSchemeFiles = get().curSchemeFiles.filter(f => f.file.path !== path);
-        const displayFiles = get().displayFiles.filter(f => f.file.path !== path);
-        const allFiles = get().allFiles.filter(f => f.file.path !== path);
-        set({ curSchemeFiles, displayFiles, allFiles });
-    },
 
     needRefresh: false,
     editingFilesPath: [],
     hasEditingFiles: () => get().editingFilesPath.length > 0,
     addEditingFile: (path: string) => set(state => ({ editingFilesPath: [...state.editingFilesPath, path] })),
-    deleteEditingFile: (path: string) => {
+    deleteEditingFile: async (path: string) => {
         const res = get().editingFilesPath.filter(i => i !== path);
         set({ editingFilesPath: res });
         if (res.length === 0) {
-            set({ needRefresh: true });
+            await get().requestData();
         }
     },
     resetEditingFiles: () => set({ editingFilesPath: [], needRefresh: false }),
+    regenerateRandomSeed: () => set({ randomSeed: Math.random().toString() }),
 });
 

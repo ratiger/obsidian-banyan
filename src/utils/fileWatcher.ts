@@ -7,6 +7,7 @@ export type FileChangeType = 'create' | 'delete' | 'modify' | 'rename' | 'meta-c
 export interface FileChange {
   type: FileChangeType;
   fileInfo: FileInfo | TFile;
+  oldPath?: string;
 }
 
 export type FileChangeCallback = (change: FileChange) => void;
@@ -71,7 +72,7 @@ export class FileWatcher {
 
     const fileInfo = createFileInfo(file, this.plugin.app);
     if (!fileInfo) return;
-    this.emit({ type: 'rename', fileInfo });
+    this.emit({ type: 'rename', fileInfo, oldPath });
   }
 
   private async handleMetaChange(file: TFile) {
