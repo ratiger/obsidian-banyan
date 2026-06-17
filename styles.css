@@ -11,6 +11,7 @@
 @import 'src/pages/header/header.css';
 @import 'src/pages/header/addnote.css';
 @import 'src/pages/header/searchbar/searchbar.css';
+@import 'src/pages/header/activeFiltersView.css';
 
 @import 'src/pages/cards/cards.css';
 @import 'src/pages/cards/emptyCard.css';

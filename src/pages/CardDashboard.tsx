@@ -9,6 +9,7 @@ import Sidebar from "./sidebar/Sidebar";
 import { DefaultFilterSchemeID } from "src/models/FilterScheme";
 import { SidebarContent } from "./sidebar/SideBarContent";
 import { HeaderView } from "./header/HeaderView";
+import { ActiveFiltersView } from "./header/ActiveFiltersView";
 import EmptyStateCard from "./cards/EmptyStateCard";
 import { ViewSelectModal } from "./sidebar/viewScheme/ViewSelectModal";
 
@@ -177,8 +178,6 @@ const CardDashboardInner = ({ plugin }: { plugin: BanyanPlugin }) => {
     );
   }), [displayFiles, curScheme.pinned, lastCardElementRef, useCardNote2]);
 
-  // removed getColumns
-
   return (
     <div className="dashboard-container" ref={dashboardRef}>
       {showSidebar != 'normal' && <Sidebar visible={showSidebar == 'show'} onClose={() => setShowSidebar('hide')}><SidebarContent /></Sidebar>}
@@ -204,6 +203,7 @@ const CardDashboardInner = ({ plugin }: { plugin: BanyanPlugin }) => {
             {enableViewSchemes && curScheme.type != 'ViewScheme' && curScheme.id != DefaultFilterSchemeID && cardNodes.length > 0 && <button className="clickable-icon batch-add-button" onClick={handleBatchImportToView}>{i18n.t('batch_add_to_view')}</button>}
           </div>
         </div>
+        <ActiveFiltersView curScheme={curScheme} colCount={colCount} />
         <div className="main-cards">
           {cardNodes.length === 0 ? (
             <EmptyStateCard isSearch={curScheme.type == 'FilterScheme' && curScheme.id !== DefaultFilterSchemeID} />

@@ -1,0 +1,103 @@
+/* --- Active Filter Conditions Bar --- */
+.dashboard-active-filters-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 0 0 10px 8px;
+  font-size: var(--font-small);
+  color: var(--text-muted);
+  box-sizing: border-box;
+  max-width: calc(100% - 8px);
+}
+
+.active-filters-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: var(--font-semibold);
+  color: var(--text-normal);
+  padding-right: 8px;
+  border-right: 1px solid var(--border-color);
+  height: 16px;
+  white-space: nowrap;
+}
+
+.active-filters-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.filter-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  transition: all 0.2s ease;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-chip-label {
+  font-weight: var(--font-medium);
+  color: var(--text-normal);
+}
+
+.filter-chip-label--exclude {
+  color: var(--text-error);
+}
+
+.filter-chip-value {
+  color: var(--color-accent);
+  font-family: var(--font-monospace);
+  font-weight: var(--font-semibold);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filter-chip-tags-list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.filter-chip-tag-item {
+  font-size: var(--font-smaller);
+  color: var(--color-accent);
+  background-color: var(--background-secondary);
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.filter-chip-tag-item--exclude {
+  color: var(--text-error);
+  background-color: rgba(224, 86, 86, 0.1);
+  border-color: rgba(224, 86, 86, 0.2);
+}
+
+@media (max-width: 480px) {
+  .dashboard-active-filters-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .active-filters-label {
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
+    width: 100%;
+    padding-right: 0;
+    padding-bottom: 4px;
+    margin-bottom: 2px;
+    height: auto;
+  }
+}
