@@ -43,7 +43,7 @@ export default class BanyanPlugin extends Plugin {
 			if (!state.hasEditingFiles()) {
 				if (requestDataTimer) clearTimeout(requestDataTimer);
 				requestDataTimer = setTimeout(() => {
-					state.requestData();
+					state.requestGlobalData();
 				}, 100);
 			}
 		});
@@ -349,7 +349,6 @@ export default class BanyanPlugin extends Plugin {
 		await this.saveData(this.settings);
 	}
 
-	// 使得打开的视图唯一
 	activateView(viewType: string) {
 		const { workspace } = this.app;
 
@@ -365,6 +364,15 @@ export default class BanyanPlugin extends Plugin {
 			leaf = workspace.getLeaf(true);
 			leaf.setViewState({ type: viewType, active: true }).then(() => leaf && workspace.revealLeaf(leaf));
 		}
+	}
+
+	// 不管是否已存在，都打开新的
+	openNewDashboard() {
+		const { workspace } = this.app;
+		const leaf = workspace.getLeaf('tab');
+		leaf.setViewState({ type: CARD_DASHBOARD_VIEW_TYPE, active: true }).then(() => {
+			workspace.revealLeaf(leaf);
+		});
 	}
 }
 

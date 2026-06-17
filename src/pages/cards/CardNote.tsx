@@ -2,7 +2,7 @@ import { App, WorkspaceLeaf, MarkdownView, Platform } from "obsidian";
 import * as React from "react";
 import { CardNoteMenuButton, openCardNoteMoreMenu } from "./CardNoteMenu";
 import { i18n } from "src/utils/i18n";
-import { useCombineStore } from "src/store";
+import { useCombineStore, useDashboardLocalStore } from "src/store";
 import { FileInfo } from "src/models/FileInfo";
 import { createEmptySearchFilterScheme } from "src/models/FilterScheme";
 import { Icon } from "src/components/Icon";
@@ -150,7 +150,9 @@ const CardNote = ({ fileInfo, isPinned, editable = false }: CardNoteProps) => {
   const plugin = useCombineStore((state) => state.plugin);
   const showBacklinksInCardNote = useCombineStore((state) => state.settings.showBacklinksInCardNote);
   const sortType = useCombineStore((state) => state.appData.sortType);
-  const setCurScheme = useCombineStore((state) => state.setCurScheme);
+  const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
+  const curScheme = useDashboardLocalStore((state) => state.curScheme);
+  const pinFile = useDashboardLocalStore((state) => state.pinFile);
   const shouldShowTitle = useCombineStore((state) => state.shouldShowTitle);
   const app = plugin.app;
   const isCreated = sortType === 'created' || sortType === 'earliestCreated';
@@ -183,7 +185,7 @@ const CardNote = ({ fileInfo, isPinned, editable = false }: CardNoteProps) => {
       onContextMenu={e => {
         if (!Platform.isMobile) {
           e.preventDefault();
-          openCardNoteMoreMenu({ event: e.nativeEvent, fileInfo, isPinned });
+          openCardNoteMoreMenu({ event: e.nativeEvent, fileInfo, isPinned, curScheme, setCurScheme, pinFile });
         }
       }}
     >
@@ -201,7 +203,7 @@ const CardNote = ({ fileInfo, isPinned, editable = false }: CardNoteProps) => {
           </div>
         )}</div>}
         <div className="card-note-more">
-          <CardNoteMenuButton fileInfo={fileInfo} isPinned={isPinned} />
+          <CardNoteMenuButton fileInfo={fileInfo} isPinned={isPinned} curScheme={curScheme} setCurScheme={setCurScheme} pinFile={pinFile} />
         </div>
       </div>}
       <NoteContentView

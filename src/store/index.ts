@@ -6,7 +6,6 @@ import { RandomReviewState, useRandomReviewStore } from "./useRandomReviewStore"
 import { SettingsState, useSettingsStore } from "./useSettingsStore";
 import { FileStoreState, useFileStore } from "./useFileStore";
 import BanyanPlugin from "src/BanyanPlugin";
-import { getDefaultFilterScheme } from "src/models/FilterScheme";
 
 interface BaseState {
     plugin: BanyanPlugin;
@@ -22,7 +21,7 @@ export const useCombineStore = create<CombineState>()((...a) => ({
     backlinksMap: {},
     setBacklinksMap: (map) => { const [set] = a; set({ backlinksMap: map }); },
     setupPlugin: (plugin: BanyanPlugin) => {
-        const [set] = a;
+        const [set, get] = a;
         set({
             plugin: plugin,
             settings: { ...plugin.settings },
@@ -30,8 +29,8 @@ export const useCombineStore = create<CombineState>()((...a) => ({
             viewSchemes: [...plugin.appData.viewSchemes],
             filterSchemes: [...plugin.appData.filterSchemes],
             randomReviewFilters: [...plugin.appData.randomReviewFilters],
-            curScheme: getDefaultFilterScheme(plugin.appData.filterSchemes),
         });
+        get().requestGlobalData();
     },
     ...useDashBoardStore(...a),
     ...useFilterSchemeStore(...a),
@@ -40,3 +39,5 @@ export const useCombineStore = create<CombineState>()((...a) => ({
     ...useSettingsStore(...a),
     ...useFileStore(...a),
 }));
+
+export * from "./useDashboardLocalStore";

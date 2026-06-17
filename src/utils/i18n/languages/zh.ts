@@ -203,7 +203,8 @@ export default {
     notes_modified_at: "条笔记更新于",
 
     create_note: "创建笔记",
-    setting_panel: "设置面板",
+    setting_panel: "插件设置",
+    open_new_panel: "打开新面板",
     random_browse: "乱序浏览",
 
     all_notes: "所有笔记",

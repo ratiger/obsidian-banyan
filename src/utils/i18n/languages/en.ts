@@ -201,7 +201,8 @@ export default {
     notes_modified_at: "notes modified at",
 
     create_note: "Create note",
-    setting_panel: "Setting panel",
+    setting_panel: "Plugin Setting",
+    open_new_panel: "Open New Dashboard",
     random_browse: "Random browse",
 
     all_notes: "All notes",

@@ -3,7 +3,7 @@ import { FilterSchemesInfo } from './filterScheme/FilterSchemesInfo';
 import { ViewSchemesInfo } from './viewScheme/ViewSchemesInfo';
 import { RandomReviewInfo } from './randomReview/RandomReviewInfo';
 import { i18n } from 'src/utils/i18n';
-import { useCombineStore } from 'src/store';
+import { useCombineStore, useDashboardLocalStore } from 'src/store';
 import { SearchFilterScheme } from 'src/models/FilterScheme';
 import { useMemo, useState } from 'react';
 import { SidebarButton } from './SidebarButton';
@@ -11,7 +11,7 @@ import { SidebarSwitchButton } from './SidebarSwitchButton';
 import { Platform } from 'obsidian';
 
 export const SidebarContent = () => {
-    const setCurScheme = useCombineStore((state) => state.setCurScheme);
+    const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
     const plugin = useCombineStore((state) => state.plugin);
     const settings = useCombineStore((state) => state.settings);
 
@@ -27,6 +27,9 @@ export const SidebarContent = () => {
             <SidebarButton leftIconName="settings"
                 label={i18n.t('setting_panel')}
                 onClick={() => plugin.openSettingsPanel()} />
+            <SidebarButton leftIconName="panel-bottom-open"
+                label={i18n.t('open_new_panel')}
+                onClick={() => plugin.openNewDashboard()} />
             {!Platform.isMobile && (
                 <SidebarButton leftIconName="lightbulb"
                     label={i18n.t('create_note')}

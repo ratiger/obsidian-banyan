@@ -5,15 +5,15 @@ import { SidebarButton } from "../SidebarButton";
 import { Menu } from "obsidian";
 import { ViewEditModal } from "./ViewEditModal";
 import { i18n } from "src/utils/i18n";
-import { useCombineStore } from "src/store";
+import { useCombineStore, useDashboardLocalStore } from "src/store";
 
 export const ViewSchemesInfo = () => {
 
     const app = useCombineStore((state) => state.plugin.app);
     const viewSchemes = useCombineStore((state) => state.viewSchemes);
-    const curScheme = useCombineStore((state) => state.curScheme);
+    const curScheme = useDashboardLocalStore((state) => state.curScheme);
     const curViewSchemeID = curScheme.type === 'ViewScheme' ? curScheme.id : undefined;
-    const setCurScheme = useCombineStore((state) => state.setCurScheme);
+    const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
     const reorderViewSchemes = useCombineStore((state) => state.reorderViewSchemes);
     const updateViewScheme = useCombineStore((state) => state.updateViewScheme);
     const createViewScheme = useCombineStore((state) => state.createViewScheme);

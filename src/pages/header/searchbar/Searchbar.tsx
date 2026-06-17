@@ -4,15 +4,15 @@ import { useState, useEffect, useRef } from "react";
 import { SearchFilterScheme, SearchFilterSchemeID } from "src/models/FilterScheme";
 import { Platform } from "obsidian";
 import { i18n } from "src/utils/i18n";
-import { useCombineStore } from "src/store";
+import { useCombineStore, useDashboardLocalStore } from "src/store";
 import { isEmptyDateRange } from "src/models/DateRange";
 import { isEmptyTagFilter } from "src/models/TagFilter";
 
 export const Searchbar = () => {
 
     const allTags = useCombineStore((state) => state.allTags);
-    const setCurScheme = useCombineStore((state) => state.setCurScheme);
-    const curScheme = useCombineStore((state) => state.curScheme);
+    const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
+    const curScheme = useDashboardLocalStore((state) => state.curScheme);
 
     const [tempFilterScheme, setTempFilterScheme] = useState(SearchFilterScheme);
     const [showFilterBox, setShowFilterBox] = useState(false);

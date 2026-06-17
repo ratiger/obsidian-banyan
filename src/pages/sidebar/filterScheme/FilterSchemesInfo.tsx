@@ -5,16 +5,16 @@ import { Icon } from "src/components/Icon";
 import { SidebarButton } from "../SidebarButton";
 import { Menu } from "obsidian";
 import { i18n } from "src/utils/i18n";
-import { useCombineStore } from "src/store";
+import { useCombineStore, useDashboardLocalStore } from "src/store";
 
 export const FilterSchemesInfo = () => {
 
     const app = useCombineStore((state) => state.plugin.app);
     const allTags = useCombineStore((state) => state.allTags);
     const filterSchemes = useCombineStore((state) => state.filterSchemes);
-    const curScheme = useCombineStore((state) => state.curScheme);
+    const curScheme = useDashboardLocalStore((state) => state.curScheme);
     const curFilterSchemeID = curScheme.type === 'FilterScheme' ? curScheme.id : undefined;
-    const setCurScheme = useCombineStore((state) => state.setCurScheme);
+    const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
     const updateFilterScheme = useCombineStore((state) => state.updateFilterScheme);
     const createFilterScheme = useCombineStore((state) => state.createFilterScheme);
     const deleteFilterScheme = useCombineStore((state) => state.deleteFilterScheme);

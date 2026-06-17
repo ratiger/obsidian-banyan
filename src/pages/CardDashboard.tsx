@@ -16,7 +16,7 @@ import { useDashboardLayout } from 'src/hooks/useDashboardLayout';
 import { useInfiniteScroll } from 'src/hooks/useInfiniteScroll';
 import AddNoteView from "./header/AddNoteView";
 import { i18n } from "src/utils/i18n";
-import { useCombineStore } from "src/store";
+import { useCombineStore, createDashboardLocalStore, DashboardStoreContext, useDashboardLocalStore } from "src/store";
 import { SortFilesButton } from "./header/SortFilesButton";
 
 import { MasonryLayout } from "src/components/MasonryLayout";
@@ -63,16 +63,26 @@ export class CardDashboard extends ItemView {
 }
 
 const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
+  const [localStore] = useState(() => createDashboardLocalStore(plugin));
+
+  return (
+    <DashboardStoreContext.Provider value={localStore}>
+      <CardDashboardInner plugin={plugin} />
+    </DashboardStoreContext.Provider>
+  );
+};
+
+const CardDashboardInner = ({ plugin }: { plugin: BanyanPlugin }) => {
   const app = plugin.app;
 
   const dashboardRef = React.useRef<HTMLDivElement>(null);
 
-  const requestData = useCombineStore((state) => state.requestData);
-  const curSchemeFiles = useCombineStore((state) => state.curSchemeFiles);
-  const curScheme = useCombineStore((state) => state.curScheme);
+  const requestData = useDashboardLocalStore((state) => state.requestData);
+  const curSchemeFiles = useDashboardLocalStore((state) => state.curSchemeFiles);
+  const curScheme = useDashboardLocalStore((state) => state.curScheme);
   const filterSchemes = useCombineStore((state) => state.filterSchemes);
   const viewSchemes = useCombineStore((state) => state.viewSchemes);
-  const setCurScheme = useCombineStore((state) => state.setCurScheme);
+  const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
 
   const mainContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -85,9 +95,9 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
   }, [curScheme]);
 
   const updateViewScheme = useCombineStore((state) => state.updateViewScheme);
-  const curSchemeNotesLength = useCombineStore((state) => state.curSchemeFiles.length);
+  const curSchemeNotesLength = useDashboardLocalStore((state) => state.curSchemeFiles.length);
   const resetEditingFiles = useCombineStore((state) => state.resetEditingFiles);
-  const regenerateRandomSeed = useCombineStore((state) => state.regenerateRandomSeed);
+  const regenerateRandomSeed = useDashboardLocalStore((state) => state.regenerateRandomSeed);
 
   const cardsDirectory = useCombineStore((state) => state.settings.cardsDirectory);
   const useCardNote2 = useCombineStore((state) => state.settings.useCardNote2);
@@ -117,6 +127,7 @@ const CardDashboardView = ({ plugin }: { plugin: BanyanPlugin }) => {
     const requestFiles = async () => {
       resetEditingFiles();
       setIsLoading(true);
+      await useCombineStore.getState().requestGlobalData();
       await requestData();
       setCurrentPage(1);
       setIsLoading(false);

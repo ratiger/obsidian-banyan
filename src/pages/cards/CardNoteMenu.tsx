@@ -5,20 +5,22 @@ import { ViewSelectModal } from "../sidebar/viewScheme/ViewSelectModal";
 import { openDeleteConfirmModal } from "src/components/ConfirmModal";
 import { Icon } from "src/components/Icon";
 import { FileInfo } from "src/models/FileInfo";
+import { FilterScheme } from "src/models/FilterScheme";
+import { ViewScheme } from "src/models/ViewScheme";
 
 export interface CardNoteMenuParams {
   event: MouseEvent;
   fileInfo: FileInfo;
   isPinned: boolean;
+  curScheme: FilterScheme | ViewScheme;
+  setCurScheme: (scheme: FilterScheme | ViewScheme) => void;
+  pinFile: (f: FileInfo, isPinned: boolean) => void;
 }
 
-export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenuParams) {
+export function openCardNoteMoreMenu({ event, fileInfo, isPinned, curScheme, setCurScheme, pinFile }: CardNoteMenuParams) {
   const plugin = useCombineStore.getState().plugin;
-  const pinFile = useCombineStore.getState().pinFile;
   const viewSchemes = useCombineStore.getState().viewSchemes;
   const updateViewScheme = useCombineStore.getState().updateViewScheme;
-  const curScheme = useCombineStore.getState().curScheme;
-  const setCurScheme = useCombineStore.getState().setCurScheme;
   const updateWhenDeleteFile = useCombineStore.getState().updateWhenDeleteFile;
   const enableViewSchemes = useCombineStore.getState().settings.enableViewSchemes;
   const isInView = curScheme.type === 'ViewScheme';
@@ -38,8 +40,8 @@ export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenu
       item.setTitle(i18n.t('remove_from_view'));
       item.onClick(() => {
         if (curScheme.type !== 'ViewScheme') return;
-        const newFiles = [...curScheme.files.filter((file) => file !== fileInfo.file.path)];
-        const newPinned = [...curScheme.pinned.filter((file) => file !== fileInfo.file.path)];
+        const newFiles = [...curScheme.files.filter((file: string) => file !== fileInfo.file.path)];
+        const newPinned = [...curScheme.pinned.filter((file: string) => file !== fileInfo.file.path)];
         const newScheme = { ...curScheme, files: newFiles, pinned: newPinned };
         updateViewScheme(newScheme);
         setCurScheme(newScheme);
@@ -130,10 +132,10 @@ export function openCardNoteMoreMenu({ event, fileInfo, isPinned }: CardNoteMenu
   menu.showAtMouseEvent(event);
 }
 
-export const CardNoteMenuButton = ({ fileInfo, isPinned }: { fileInfo: FileInfo, isPinned: boolean }) => {
+export const CardNoteMenuButton = ({ fileInfo, isPinned, curScheme, setCurScheme, pinFile }: { fileInfo: FileInfo, isPinned: boolean, curScheme: any, setCurScheme: (scheme: any) => void, pinFile: (f: FileInfo, isPinned: boolean) => void }) => {
 
   return (<button className="clickable-icon"
     children={<Icon name='ellipsis' />}
-    onClick={(e) => openCardNoteMoreMenu({ event: e.nativeEvent, fileInfo, isPinned })}
+    onClick={(e) => openCardNoteMoreMenu({ event: e.nativeEvent, fileInfo, isPinned, curScheme, setCurScheme, pinFile })}
   />);
 }
