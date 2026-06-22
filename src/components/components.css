@@ -264,8 +264,8 @@
 /* 手机端悬浮添加按钮 */
 .fab-add-note {
     position: absolute;
-    right: 36px;
-    bottom: 76px; /* 主观设置 */
+    right: 6px; /* 主观设置 */
+    bottom: 106px; /* 主观设置 */
     /* 底部tabbar高度 间距 按钮高度 */
     z-index: 1001;
     width: 56px;
