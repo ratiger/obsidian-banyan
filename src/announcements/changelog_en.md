@@ -1,5 +1,18 @@
 # Changelog
 
+### 1.4.4
+
+Added
+
+- Now we can open multiple dashboard tabs. 
+- Now the condition of filter scheme or search will be shown above card list.
+
+Fix
+
+- The add note floating button may be obscured on some devices.
+- The card list may not refresh after some note updates.
+- Potential layout issues that occurred with certain window sizes.
+
 ### 1.4.3
 
 Improvements
