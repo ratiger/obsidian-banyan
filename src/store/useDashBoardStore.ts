@@ -1,11 +1,6 @@
-import { createEmptyFilterScheme, DefaultFilterSchemeID, FilterScheme, getDefaultFilterScheme, SearchFilterSchemeID } from "src/models/FilterScheme";
-import { ViewScheme } from "src/models/ViewScheme";
 import { StateCreator } from "zustand";
-import { withinDateRange } from "src/models/DateRange";
 import { CombineState } from ".";
 import { FileInfo } from "src/models/FileInfo";
-import { isOKWithTagFilter } from "src/models/TagFilter";
-import { stripMarkdown } from "src/utils/markdownUtils";
 
 export interface DashBoardState {
     allFiles: FileInfo[];

@@ -18,12 +18,11 @@ export default class BanyanPlugin extends Plugin {
 
 	async onload() {
 		await this.loadSettings();
+		this.fileUtils = new FileUtils(this.app, this);
 
 		// 初始化 store
 		const { useCombineStore } = await import('./store');
 		useCombineStore.getState().setupPlugin(this);
-
-		this.fileUtils = new FileUtils(this.app, this);
 
 		const { createFileWatcher } = await import('./utils/fileWatcher');
 		const watcher = createFileWatcher(this);
