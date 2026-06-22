@@ -5,31 +5,38 @@ import { useCombineStore } from 'src/store';
 export const useDashboardLayout = <T extends HTMLElement | null>(containerRef: RefObject<T>) => {
     const cardsColumns = useCombineStore((state) => state.settings.cardsColumns);
     const [showSidebar, setShowSidebar] = useState<'normal' | 'hide' | 'show'>(Platform.isMobile ? 'hide' : 'normal');
-    const [colCount, setColCount] = useState(1);
+    const [colCount, setColCount] = useState<'small' | 'one' | 'two'>('one');
 
     const updateLayout = useCallback((width?: number) => {
         if (Platform.isMobile) {
             setShowSidebar('hide');
-            setColCount(1);
+            setColCount('small');
             return;
         }
 
-        const containerWidth = width ?? containerRef.current?.clientWidth ?? 0;
+        let containerWidth = width ?? containerRef.current?.clientWidth ?? 0;
         if (containerWidth === 0) return;
+        
+        containerWidth -= 16; // both padding 8 
+        const siderbar = 296;
+        const padding = 6;
+        const card = 620;
+        const cardGap = 16;
 
-        const _showSidebar = containerWidth >= 920 ? 'normal' : 'hide'; // 920 是试验效果得来的
+        const _showSidebar = containerWidth >= (siderbar + padding + card) ? 'normal' : 'hide';
         setShowSidebar(_showSidebar);
 
-        if (cardsColumns == 1) {
-            setColCount(1);
+        if (containerWidth < card) {
+            setColCount('small');
             return;
         }
+        
+        if (cardsColumns == 1) {
+            setColCount('one');
+            return;
+        }        
 
-        const mainWidth = containerWidth - (_showSidebar == 'normal' ? 400 : 0);
-        const cardWidth = 620;
-        const cardsPadding = 24;
-        const widthFor2Cols = cardWidth + cardsPadding + cardWidth;
-        const cnt = mainWidth >= widthFor2Cols ? 2 : 1;
+        const cnt = containerWidth >= (siderbar + padding + card + cardGap + card) ? 'two' : 'one';
         setColCount(cnt);
     }, [cardsColumns, containerRef]);
 

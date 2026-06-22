@@ -1,13 +1,24 @@
+.card-note {
+  display: flex;
+  width: 620px;
+}
+
+.card-note.small {
+  width: 100%;
+}
+
 .card-note-container {
   background: var(--background-secondary);
   color: var(--text-normal);
   border-radius: 8px;
   padding: 16px;
-  margin-bottom: 16px;
   position: relative;
   box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.16);
+  width: 620px;
+}
+
+.card-note.small .card-note-container {
   width: 100%;
-  max-width: 620px;
 }
 
 .card-note-content {

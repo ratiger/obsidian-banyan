@@ -9,7 +9,6 @@
     position: relative;
     box-shadow: 0 1px 6px 1px rgba(0, 0, 0, 0.16);
     width: 100%;
-    max-width: 620px;
     border: 1px solid transparent;
 }
 
@@ -90,6 +89,8 @@
 
 .add-note-send-button {
     padding: 6px 15px;
+    width: 48px;
+    align-self: end;
 }
 
 .add-note-send-button:hover {

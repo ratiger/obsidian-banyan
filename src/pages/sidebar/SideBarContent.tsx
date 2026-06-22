@@ -20,7 +20,7 @@ export const SidebarContent = () => {
     }
 
     return (
-        <div className="sidebar-content-container">
+        <div className="sidebar-content">
             <StatisticsInfo />
             <Heatmap onCickDate={handleClickDate} />
             <div className="sidebar-margin-top" />

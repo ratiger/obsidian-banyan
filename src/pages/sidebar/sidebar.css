@@ -12,8 +12,8 @@
 .sidebar-container {
     position: absolute;
     height: 100%;
-    background: var(--background-secondary, #222);
-    color: var(--text-normal, #fff);
+    background: var(--background-secondary);
+    color: var(--text-normal);
     box-shadow: 2px 0 8px rgba(0, 0, 0, 0.08);
     z-index: 1001;
     transition: left 0.25s cubic-bezier(.4, 0, .2, 1);
@@ -43,7 +43,7 @@
 
 /* 侧边栏内容 */
 
-.sidebar-content-container {
+.sidebar-content {
     display: flex;
     flex-direction: column;
     padding: 0 16px 50px 16px;
@@ -55,7 +55,7 @@
     scrollbar-width: none;
 }
 
-.sidebar-content-container::-webkit-scrollbar {
+.sidebar-content::-webkit-scrollbar {
     display: none;
 }
 

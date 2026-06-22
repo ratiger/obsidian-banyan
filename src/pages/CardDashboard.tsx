@@ -7,22 +7,17 @@ import CardNote from "./cards/CardNote";
 import { Icon } from "src/components/Icon";
 import Sidebar from "./sidebar/Sidebar";
 import { DefaultFilterSchemeID } from "src/models/FilterScheme";
-import { SidebarContent } from "./sidebar/SideBarContent";
 import { HeaderView } from "./header/HeaderView";
 import { ActiveFiltersView } from "./header/ActiveFiltersView";
 import EmptyStateCard from "./cards/EmptyStateCard";
 import { ViewSelectModal } from "./sidebar/viewScheme/ViewSelectModal";
-
 import { useDashboardLayout } from 'src/hooks/useDashboardLayout';
 import { useInfiniteScroll } from 'src/hooks/useInfiniteScroll';
 import AddNoteView from "./header/AddNoteView";
 import { i18n } from "src/utils/i18n";
 import { useCombineStore, createDashboardLocalStore, DashboardStoreContext, useDashboardLocalStore } from "src/store";
 import { SortFilesButton } from "./header/SortFilesButton";
-
-import { MasonryLayout } from "src/components/MasonryLayout";
 import { FileInfo } from "src/models/FileInfo";
-
 
 
 export const CARD_DASHBOARD_VIEW_TYPE = "dashboard-view";
@@ -168,55 +163,54 @@ const CardDashboardInner = ({ plugin }: { plugin: BanyanPlugin }) => {
     modal.open();
   };
 
-  const cardNodes = useMemo(() => displayFiles.map((f, index) => {
+  const cardNotes = useMemo(() => displayFiles.map((f, index) => {
     const isLastCard = index === displayFiles.length - 1;
     const isPinned = curScheme.pinned.includes(f.file.path);
     return (
-      <div ref={isLastCard ? lastCardElementRef : null} key={f.file.path}>
+      <div ref={isLastCard ? lastCardElementRef : null} key={f.file.path} className={`card-note ${colCount == 'small' ? 'small' : ''}`}>
         <CardNote fileInfo={f} isPinned={isPinned} editable={!Platform.isMobile && useCardNote2} />
       </div>
     );
-  }), [displayFiles, curScheme.pinned, lastCardElementRef, useCardNote2]);
+  }), [displayFiles, curScheme.pinned, lastCardElementRef, useCardNote2, colCount]);
+  const isNotEmpty = displayFiles.length > 0;
 
   return (
-    <div className="dashboard-container" ref={dashboardRef}>
-      {showSidebar != 'normal' && <Sidebar visible={showSidebar == 'show'} onClose={() => setShowSidebar('hide')}><SidebarContent /></Sidebar>}
-      {showSidebar == 'normal' && <SidebarContent />}
-      <div className="main-container" ref={mainContainerRef}>
-        <HeaderView
-          showSidebar={showSidebar}
-          setShowSidebar={setShowSidebar}
-          curScheme={curScheme}
-          filterSchemes={filterSchemes}
-          setCurScheme={setCurScheme}
-        />
-        {!Platform.isMobile && <div className="main-header-add-note-container"><AddNoteView app={app} plugin={plugin} onAdd={handleRefresh} /></div>}
-        <div className="main-subheader-container">
-          <div className="main-subheader-info">
-            <div className="refresh-btn" onClick={handleRefresh}>
-              <Icon name="refresh-ccw" />
+    <div className="dashboard" ref={dashboardRef}>
+      <Sidebar showSidebar={showSidebar} onClose={() => setShowSidebar('hide')} />
+      <div className="main" ref={mainContainerRef}>
+        <div className="header">
+          <HeaderView
+            showSidebar={showSidebar}
+            setShowSidebar={setShowSidebar}
+            curScheme={curScheme}
+            filterSchemes={filterSchemes}
+            setCurScheme={setCurScheme}
+          />
+          {!Platform.isMobile && <div className="header-main-add-note-container"><AddNoteView app={app} plugin={plugin} onAdd={handleRefresh} /></div>}
+          <div className="header-sub-container">
+            <div className="header-sub-info">
+              <div className="refresh-btn" onClick={handleRefresh}>
+                <Icon name="refresh-ccw" />
+              </div>
+              <span className="header-sub-loaded-notes">{i18n.t('loaded_notes', { count: `${displayFiles.length}`, total: `${curSchemeNotesLength}` })}</span>
+              {isNotEmpty && !randomBrowse && <SortFilesButton />}
             </div>
-            <span className="main-subheader-loaded-notes">{i18n.t('loaded_notes', { count: `${displayFiles.length}`, total: `${curSchemeNotesLength}` })}</span>
-            {cardNodes.length > 0 && !randomBrowse && <SortFilesButton />}
+            <div className="header-sub-btn-section">
+              {enableViewSchemes && curScheme.type != 'ViewScheme' && curScheme.id != DefaultFilterSchemeID && isNotEmpty && <button className="clickable-icon batch-add-button" onClick={handleBatchImportToView}>{i18n.t('batch_add_to_view')}</button>}
+            </div>
           </div>
-          <div className="main-subheader-btn-section">
-            {enableViewSchemes && curScheme.type != 'ViewScheme' && curScheme.id != DefaultFilterSchemeID && cardNodes.length > 0 && <button className="clickable-icon batch-add-button" onClick={handleBatchImportToView}>{i18n.t('batch_add_to_view')}</button>}
-          </div>
+          <ActiveFiltersView curScheme={curScheme} colCount={colCount == 'two' ? 2 : 1} />
         </div>
-        <ActiveFiltersView curScheme={curScheme} colCount={colCount} />
-        <div className="main-cards">
-          {cardNodes.length === 0 ? (
+        <div className={`cards ${colCount}`}>
+          {isNotEmpty ? 
+            cardNotes :
             <EmptyStateCard isSearch={curScheme.type == 'FilterScheme' && curScheme.id !== DefaultFilterSchemeID} />
-          ) : (
-            <MasonryLayout columns={colCount}>
-              {cardNodes}
-            </MasonryLayout>
-          )}
+          }
         </div>
         {/* Add loading and end-of-list indicators here */}
-        <div className="main-cards-loading">
+        <div className="cards-loading">
           {isLoading && <div>{i18n.t('loading_text')}</div>}
-          {!isLoading && displayFiles.length >= curSchemeNotesLength && cardNodes.length > 0 && <div>{i18n.t('reached_bottom')}</div>}
+          {!isLoading && displayFiles.length >= curSchemeNotesLength && isNotEmpty && <div>{i18n.t('reached_bottom')}</div>}
         </div>
         {/* 手机端悬浮添加按钮 */}
         {Platform.isMobile && (

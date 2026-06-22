@@ -1,4 +1,10 @@
-.main-header-container {
+.header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.header-main {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -14,62 +20,61 @@
 }
 
 /* 主标题 */
-.main-header-title {
+.header-main-title {
     display: flex;
     align-items: center;
 }
 
-.main-header-title-container {
+.header-main-title-container {
     display: flex;
 }
 
-.main-header-add-note-container {
-    margin-top: 16px;
-    margin: 4px;
+.header-main-add-note-container {
+    margin: 4px 4px 0 4px;
 }
 
-.main-header-title-container {
+.header-main-title-container {
     display: flex;
 }
 
-.main-header-title-content {
+.header-main-title-content {
     padding: 6px 8px;
     color: var(--text-normal);
     font-size: var(--font-text-size);
     font-weight: var(--font-ui-semibold);
 }
 
-.main-header-title-separator {
+.header-main-title-separator {
     padding: 6px 4px;
     color: var(--text-faint);
     font-size: var(--font-small);
     font-weight: var(--font-ui-semibold);
 }
 
-.main-header-title-content-clickable {
+.header-main-title-content-clickable {
     cursor: pointer;
 }
 
-.main-header-title-content-clickable:hover {
+.header-main-title-content-clickable:hover {
     background: var(--background-secondary);
     border-radius: 6px;
 }
 
 /* 副标题 */
 
-.main-subheader-container {
+.header-sub-container {
     margin-top: 0;
     display: flex;
     align-items: baseline;
     justify-content: space-between;
 }
 
-.main-subheader-info {
+.header-sub-info {
     display: flex;
     align-items: center;
 }
 
-.main-subheader-info .refresh-btn {
+.header-sub-info .refresh-btn {
     background-color: transparent;
     padding: var(--size-2-2) var(--size-2-3);
     cursor: pointer;
@@ -77,14 +82,14 @@
 }
 
 @media (hover: hover) {
-    .main-subheader-info .refresh-btn:hover {
+    .header-sub-info .refresh-btn:hover {
         background-color: var(--theme-color-translucent-015);
         color: var(--icon-color-hover);
     }
 }
 
 @media (hover: none) {
-    .main-subheader-info .refresh-btn:active {
+    .header-sub-info .refresh-btn:active {
         background-color: var(--theme-color-translucent-015);
         color: var(--icon-color-hover);
     }
@@ -92,13 +97,13 @@
 
 
 
-.main-subheader-loaded-notes {
+.header-sub-loaded-notes {
     padding: 12px 6px;
     color: var(--text-muted);
     font-size: var(--font-smaller);
 }
 
-.main-subheader-btn-section {
+.header-sub-btn-section {
     display: flex;
     gap: 8px;
 }
