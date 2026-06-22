@@ -4,6 +4,7 @@
 }
 
 .card-note.small {
+  min-width: 0; /* 避免变成 auto，从而被迫变成卡片视图一开始决定的某个很大的宽度 */
   width: 100%;
 }
 
