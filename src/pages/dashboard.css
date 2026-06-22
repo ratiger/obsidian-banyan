@@ -1,5 +1,6 @@
 /* --- 整个面板 --- */
 .dashboard {
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
