@@ -192,8 +192,10 @@ export default class BanyanPlugin extends Plugin {
 	updateSettingIfNeeded = () => {
 		// *** 版本更新时，在以下添加更新逻辑 ***
 		if (this.settings.settingsVersion < 2) {
-			const getNewFilterIfNeeded = (tf: TagFilter) => {
-				return tf.noTag !== undefined ? tf : { ...tf, notag: 'unlimited' };
+			const getNewFilterIfNeeded = (tf: any) => {
+				const noTag = tf.noTag !== undefined ? tf.noTag : (tf.notag !== undefined ? tf.notag : 'unlimited');
+				const { notag, ...rest } = tf;
+				return { ...rest, noTag };
 			};
 			this.appData.filterSchemes = [...this.appData.filterSchemes.map((scheme) => {
 				return { ...scheme, tagFilter: getNewFilterIfNeeded(scheme.tagFilter) };
@@ -325,6 +327,30 @@ export default class BanyanPlugin extends Plugin {
 				await this.saveAppData();
 				await this.saveSettings();
 			}
+		}
+
+		// 3. 兼容性修复：将由于拼写错误导入的 `notag` 属性规范化为 `noTag`
+		const sanitizeTagFilter = (tf: any): TagFilter => {
+			if (!tf) return { or: [[]], not: [], noTag: 'unlimited' };
+			const noTag = tf.noTag !== undefined ? tf.noTag : (tf.notag !== undefined ? tf.notag : 'unlimited');
+			return {
+				or: tf.or ?? [[]],
+				not: tf.not ?? [],
+				noTag: noTag
+			};
+		};
+
+		if (this.appData.filterSchemes) {
+			this.appData.filterSchemes = this.appData.filterSchemes.map(scheme => ({
+				...scheme,
+				tagFilter: sanitizeTagFilter(scheme.tagFilter)
+			}));
+		}
+		if (this.appData.randomReviewFilters) {
+			this.appData.randomReviewFilters = this.appData.randomReviewFilters.map(filter => ({
+				...filter,
+				tagFilter: sanitizeTagFilter(filter.tagFilter)
+			}));
 		}
 	}
 
