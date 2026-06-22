@@ -29,6 +29,9 @@
 /* 容器 */
 .searchbar-mobile-container {
     position: relative;
+    height: 32px;
+    width: 32px;
+    align-content: center;
 }
 
 .searchbar-mobile-button {
