@@ -1,4 +1,4 @@
-# Changelog
+# 🚀 Banyan Changelog
 
 ### 1.4.4
 
@@ -55,7 +55,7 @@ Improvements
 - Sidebar - Add a button to open plugin setting panel. 
 - Imroved some descriptions.
 
-#### 1.3.4 
+### 1.3.4 
 
 Improvements
 
@@ -66,7 +66,7 @@ Fix
 
 - Fixed the issue where notes added by the clipper plugin had no ID, which previously caused new notes to be improperly managed by this plugin.
 
-#### 1.3.3
+### 1.3.3
 ​​
 Improvements​​
 
@@ -96,7 +96,7 @@ Optimizations​​
 ​​- Settings​​ - Improved layout and text descriptions.
 
 
-#### 1.3.1
+### 1.3.1
 
 Improvements:​​
 
@@ -111,7 +111,7 @@ Improvements:​​
 - Fixed highlight state not reverted after clicking for some buttons on mobile.
 
 
-#### 1.3.0
+### 1.3.0
 
 New Features:
 
@@ -130,7 +130,7 @@ Bug Fixes:
 - Card view (desktop): fixed an issue where the note position would change unexpectedly during in-place editing.
 - Card view (mobile): fixed an issue where cards were too narrow and visually unappealing when the content was too short.
 
-#### 1.2.13​​
+### 1.2.13​​
 
 ​​Improvements:​​
 - ​​Search Bar​​ - The filter button now highlights when searching with additional filter conditions (beyond just keywords).
