@@ -72,6 +72,8 @@ export default {
 
     setting_on_open_name: "Open after start",
     setting_on_open_desc: "Enable this to open the plugin when obsidian starts.",
+    setting_on_open_pc_label: "Desktop",
+    setting_on_open_mobile_label: "Mobile",
 
     setting_title_display_mode_name: "Show title",
     setting_title_display_mode_desc: "Timestamp format title will not be displayed.",

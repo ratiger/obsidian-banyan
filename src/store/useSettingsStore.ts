@@ -16,6 +16,7 @@ export interface SettingsState {
     // 单个设置项的更新方法
     updateCardsDirectory: (directory: string) => void;
     updateOpenWhenStartObsidian: (open: boolean) => void;
+    updateOpenWhenStartObsidianMobile: (open: boolean) => void;
     updateTitleDisplayMode: (mode: TitleDisplayMode) => void;
     updateCardsColumns: (columns: number) => void;
     updateSortType: (sortType: SortType) => void;
@@ -73,6 +74,10 @@ export const useSettingsStore: StateCreator<CombineState, [], [], SettingsState>
 
     updateOpenWhenStartObsidian: (open: boolean) => {
         get().updateSettings({ openWhenStartObsidian: open });
+    },
+
+    updateOpenWhenStartObsidianMobile: (open: boolean) => {
+        get().updateSettings({ openWhenStartObsidianMobile: open });
     },
 
     updateTitleDisplayMode: (mode: TitleDisplayMode) => {

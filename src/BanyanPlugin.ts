@@ -1,4 +1,4 @@
-import { Plugin, TFile, WorkspaceLeaf } from 'obsidian';
+import { Platform, Plugin, TFile, WorkspaceLeaf } from 'obsidian';
 import { BanyanPluginSettings, DEFAULT_SETTINGS, CUR_SETTINGS_VERSION } from './BanyanPluginSettings';
 import { BanyanAppData, DEFAULT_APP_DATA } from './BanyanAppData';
 import { CARD_DASHBOARD_VIEW_TYPE, CardDashboard } from './pages/CardDashboard';
@@ -84,8 +84,14 @@ export default class BanyanPlugin extends Plugin {
 		this.app.workspace.onLayoutReady(() => {
 			this.updateSettingIfNeeded();
 			// 启动时自动打开自定义面板
-			if (this.settings.openWhenStartObsidian) {
-				this.activateView(CARD_DASHBOARD_VIEW_TYPE);
+			if (Platform.isMobile) {
+				if (this.settings.openWhenStartObsidianMobile) {
+					this.activateView(CARD_DASHBOARD_VIEW_TYPE);
+				}
+			} else {
+				if (this.settings.openWhenStartObsidian) {
+					this.activateView(CARD_DASHBOARD_VIEW_TYPE);
+				}
 			}
 		});
 	}
@@ -259,6 +265,9 @@ export default class BanyanPlugin extends Plugin {
 
 			this.settings.enableViewSchemes = usedViewSchemes;
 			this.settings.enableRandomReview = usedRandomReview;
+		}
+		if (this.settings.settingsVersion < 10) {
+			this.settings.openWhenStartObsidianMobile = false;
 		}
 		this.checkAnnouncements();
 		this.settings.settingsVersion = CUR_SETTINGS_VERSION;

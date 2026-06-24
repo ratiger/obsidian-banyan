@@ -4,6 +4,7 @@ export interface BanyanPluginSettings {
 	// basic
 	settingsVersion: number;
 	openWhenStartObsidian: boolean;
+	openWhenStartObsidianMobile: boolean;
 	cardsDirectory: string;
 	cardsColumns: number;
 	fontTheme: FontTheme;
@@ -28,7 +29,7 @@ export interface BanyanPluginSettings {
 	lastVersion?: string;
 }
 
-export const CUR_SETTINGS_VERSION = 9;
+export const CUR_SETTINGS_VERSION = 10;
 
 
 
@@ -36,6 +37,7 @@ export const DEFAULT_SETTINGS: BanyanPluginSettings = {
 	// basic
 	settingsVersion: CUR_SETTINGS_VERSION,
 	openWhenStartObsidian: true,
+	openWhenStartObsidianMobile: false,
 	cardsDirectory: 'cards',
 	cardsColumns: 1,
 

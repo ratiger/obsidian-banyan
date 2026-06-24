@@ -80,15 +80,26 @@ export class BanyanSettingTab extends PluginSettingTab {
 
 	setupOpenWhenStartObsidianSetting(containerEl: HTMLElement) {
 		const settings = useCombineStore.getState().settings;
-		new Setting(containerEl)
+		const setting = new Setting(containerEl)
 			.setName(i18n.t('setting_on_open_name'))
-			.setDesc(i18n.t('setting_on_open_desc'))
-			.addToggle(toggle => {
-				toggle.setValue(settings.openWhenStartObsidian)
-					.onChange(async (value) => {
-						useCombineStore.getState().updateOpenWhenStartObsidian(value);
-					});
-			});
+			.setDesc(i18n.t('setting_on_open_desc'));
+
+		setting.controlEl.createEl('span', { text: i18n.t('setting_on_open_pc_label')});
+		setting.addToggle(toggle => {
+			toggle.setValue(settings.openWhenStartObsidian)
+				.onChange(async (value) => {
+					useCombineStore.getState().updateOpenWhenStartObsidian(value);
+				});
+		});
+
+		const mobileLabel = setting.controlEl.createEl('span', { text: i18n.t('setting_on_open_mobile_label')});
+		mobileLabel.style.marginLeft = '16px';
+		setting.addToggle(toggle => {
+			toggle.setValue(settings.openWhenStartObsidianMobile)
+				.onChange(async (value) => {
+					useCombineStore.getState().updateOpenWhenStartObsidianMobile(value);
+				});
+		});
 	}
 
 	setupTitleDisplayModeSetting(containerEl: HTMLElement) {

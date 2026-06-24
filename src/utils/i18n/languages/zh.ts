@@ -72,6 +72,8 @@ export default {
 
     setting_on_open_name: "启动时自动打开面板",
     setting_on_open_desc: "开启后，Obsidian 启动时会自动打开「卡片面板」。",
+    setting_on_open_pc_label: "桌面端",
+    setting_on_open_mobile_label: "移动端",
 
     setting_title_display_mode_name: "显示标题",
     setting_title_display_mode_desc: "默认的时间戳格式标题不会显示。",
