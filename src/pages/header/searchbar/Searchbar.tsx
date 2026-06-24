@@ -1,25 +1,20 @@
 import { Icon } from "src/components/Icon";
 import { SearchView } from "./SearchView";
 import { useState, useEffect, useRef } from "react";
-import { SearchFilterScheme, SearchFilterSchemeID } from "src/models/FilterScheme";
+import { SearchFilterScheme } from "src/models/FilterScheme";
 import { Platform } from "obsidian";
 import { i18n } from "src/utils/i18n";
 import { useCombineStore, useDashboardLocalStore } from "src/store";
-import { isEmptyDateRange } from "src/models/DateRange";
-import { isEmptyTagFilter } from "src/models/TagFilter";
 
 export const Searchbar = () => {
 
     const allTags = useCombineStore((state) => state.allTags);
     const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
-    const curScheme = useDashboardLocalStore((state) => state.curScheme);
 
     const [tempFilterScheme, setTempFilterScheme] = useState(SearchFilterScheme);
     const [showFilterBox, setShowFilterBox] = useState(false);
     const searchBarRef = useRef<HTMLDivElement>(null);
 
-    const isSearchAndFilterNotEmpty = curScheme.type === 'FilterScheme' && curScheme.id === SearchFilterSchemeID && (!isEmptyDateRange(curScheme.dateRange) || !isEmptyTagFilter(curScheme.tagFilter));
-    const filterColor = isSearchAndFilterNotEmpty ? "var(--color-accent)" : "var(--icon-color)";
 
     const handleSearch = () => {
         setCurScheme(tempFilterScheme);
@@ -133,7 +128,7 @@ export const Searchbar = () => {
                     }
                 }}
             />
-            <div onClick={() => setShowFilterBox(v => !v)} className="searchbar-desktop-filter-button"><Icon name="sliders-horizontal" color={filterColor} /></div>
+            <div onClick={() => setShowFilterBox(v => !v)} className="searchbar-desktop-filter-button"><Icon name="sliders-horizontal" /></div>
             {showFilterBox && (
                 <div className="searchbar-desktop-filter-box">
                     <div className="searchbar-desktop-filter-box-title">{i18n.t('search_view_title')}</div>
