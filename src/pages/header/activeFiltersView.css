@@ -72,17 +72,25 @@
 .filter-chip-tag-item {
   font-size: var(--font-smaller);
   color: var(--color-accent);
-  background-color: var(--background-secondary);
-  padding: 1px 6px;
-  border-radius: 4px;
-  border: 1px solid var(--border-color);
+  background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  padding: 2px 6px;
+  border-radius: 6px;
   white-space: nowrap;
+  cursor: var(--cursor-link);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .filter-chip-tag-item--exclude {
   color: var(--text-error);
-  background-color: rgba(224, 86, 86, 0.1);
-  border-color: rgba(224, 86, 86, 0.2);
+  background-color: color-mix(in srgb, var(--text-error) 10%, transparent);
+}
+
+.filter-chip-tag-item:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 15%, transparent);
+}
+
+.filter-chip-tag-item--exclude:hover {
+  background-color: color-mix(in srgb, var(--text-error) 15%, transparent);
 }
 
 @media (max-width: 480px) {

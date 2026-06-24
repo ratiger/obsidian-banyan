@@ -4,7 +4,6 @@ import { CardNoteMenuButton, openCardNoteMoreMenu } from "./CardNoteMenu";
 import { i18n } from "src/utils/i18n";
 import { useCombineStore, useDashboardLocalStore } from "src/store";
 import { FileInfo } from "src/models/FileInfo";
-import { createEmptySearchFilterScheme } from "src/models/FilterScheme";
 import { Icon } from "src/components/Icon";
 import CardNoteBacklinksView from "./CardNoteBacklinksView";
 
@@ -151,6 +150,7 @@ const CardNote = ({ fileInfo, isPinned, editable = false }: CardNoteProps) => {
   const showBacklinksInCardNote = useCombineStore((state) => state.settings.showBacklinksInCardNote);
   const sortType = useCombineStore((state) => state.appData.sortType);
   const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
+  const setCurSchemeToTag = useDashboardLocalStore((state) => state.setCurSchemeToTag);
   const curScheme = useDashboardLocalStore((state) => state.curScheme);
   const pinFile = useDashboardLocalStore((state) => state.pinFile);
   const shouldShowTitle = useCombineStore((state) => state.shouldShowTitle);
@@ -193,12 +193,7 @@ const CardNote = ({ fileInfo, isPinned, editable = false }: CardNoteProps) => {
         <div className="card-note-time">{isPinned ? `${i18n.t('general_pin')} · ` : ""}{isCreated ? i18n.t('created_at') : i18n.t('updated_at')} {new Date(isCreated ? fileInfo.file.stat.ctime : fileInfo.file.stat.mtime).toLocaleString()}</div>
         {shouldShowTitle(fileInfo.file.basename) && <div className="card-note-title"><h3>{fileInfo.file.basename}</h3></div>}
         {tags.length > 0 && <div className="card-note-tags"> {tags.map((tag) =>
-          <div className="card-note-tag" key={tag} onClick={() => {
-            const fs = createEmptySearchFilterScheme();
-            fs.tagFilter.or = [[tag]];
-            fs.name = '#' + tag;
-            setCurScheme(fs);
-          }}>
+          <div className="card-note-tag" key={tag} onClick={() => { setCurSchemeToTag(tag); }}>
             <div className="card-note-tag-content">{tag}</div>
           </div>
         )}</div>}

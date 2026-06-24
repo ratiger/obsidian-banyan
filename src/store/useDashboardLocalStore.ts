@@ -1,6 +1,6 @@
 import { createStore, StoreApi, useStore } from "zustand";
 import { createContext, useContext } from "react";
-import { FilterScheme, SearchFilterSchemeID, DefaultFilterSchemeID, getDefaultFilterScheme } from "src/models/FilterScheme";
+import { FilterScheme, SearchFilterSchemeID, DefaultFilterSchemeID, getDefaultFilterScheme, createEmptySearchFilterScheme } from "src/models/FilterScheme";
 import { ViewScheme } from "src/models/ViewScheme";
 import { FileInfo } from "src/models/FileInfo";
 import { isOKWithTagFilter } from "src/models/TagFilter";
@@ -15,6 +15,7 @@ export interface DashboardLocalState {
     randomSeed: string;
 
     setCurScheme: (scheme: FilterScheme | ViewScheme) => void;
+    setCurSchemeToTag: (tag: string) => void;
     regenerateRandomSeed: () => void;
     requestData: () => Promise<void>;
     pinFile: (f: FileInfo, isPinned: boolean) => void;
@@ -39,6 +40,13 @@ export const createDashboardLocalStore = (plugin: BanyanPlugin) => {
         setCurScheme: (scheme: FilterScheme | ViewScheme) => {
             set({ curScheme: scheme, randomSeed: Math.random().toString() });
             get().requestData();
+        },
+
+        setCurSchemeToTag: (tag: string) => {
+            const fs = createEmptySearchFilterScheme();
+            fs.tagFilter.or = [[tag]];
+            fs.name = '#' + tag;
+            get().setCurScheme(fs);
         },
 
         regenerateRandomSeed: () => {

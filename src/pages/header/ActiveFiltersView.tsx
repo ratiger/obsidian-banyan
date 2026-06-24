@@ -5,6 +5,7 @@ import { ViewScheme } from "src/models/ViewScheme";
 import { isEmptyDateRange } from "src/models/DateRange";
 import { Icon } from "src/components/Icon";
 import { i18n } from "src/utils/i18n";
+import { useDashboardLocalStore } from "src/store";
 
 export interface ActiveFiltersViewProps {
   curScheme: FilterScheme | ViewScheme;
@@ -12,6 +13,7 @@ export interface ActiveFiltersViewProps {
 }
 
 export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme, colCount }) => {
+  const setCurSchemeToTag = useDashboardLocalStore((state) => state.setCurSchemeToTag);
   const filterChips = useMemo(() => {
     if (curScheme.type !== 'FilterScheme') return [];
 
@@ -59,7 +61,13 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
           </span>
           <div className="filter-chip-tags-list">
             {row.map(tag => (
-              <span className="filter-chip-tag-item" key={tag}>#{tag}</span>
+              <span
+                className="filter-chip-tag-item"
+                key={tag}
+                onClick={() => setCurSchemeToTag(tag)}
+              >
+                #{tag}
+              </span>
             ))}
           </div>
         </div>
@@ -74,7 +82,13 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
           <span className="filter-chip-label filter-chip-label--exclude">{i18n.t('tag_group_label_exclude')}</span>
           <div className="filter-chip-tags-list">
             {curScheme.tagFilter.not.map(tag => (
-              <span className="filter-chip-tag-item filter-chip-tag-item--exclude" key={tag}>#{tag}</span>
+              <span
+                className="filter-chip-tag-item filter-chip-tag-item--exclude"
+                key={tag}
+                onClick={() => setCurSchemeToTag(tag)}
+              >
+                #{tag}
+              </span>
             ))}
           </div>
         </div>
@@ -95,7 +109,7 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
     }
 
     return chips;
-  }, [curScheme]);
+  }, [curScheme, setCurSchemeToTag]);
 
   const maxWidth = useMemo(() => {
     return colCount * 620 + (colCount - 1) * 16;
