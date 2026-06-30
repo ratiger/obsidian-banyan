@@ -9,12 +9,23 @@ import { useCombineStore, useDashboardLocalStore } from "src/store";
 export const Searchbar = () => {
 
     const allTags = useCombineStore((state) => state.allTags);
+    const curScheme = useDashboardLocalStore((state) => state.curScheme);
     const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
 
     const [tempFilterScheme, setTempFilterScheme] = useState(SearchFilterScheme);
     const [showFilterBox, setShowFilterBox] = useState(false);
     const searchBarRef = useRef<HTMLDivElement>(null);
 
+    useEffect(() => {
+        if (curScheme && curScheme.type === 'FilterScheme') {
+            setTempFilterScheme({
+                ...tempFilterScheme, // 保留表明它是「搜索」的相关属性值
+                tagFilter: JSON.parse(JSON.stringify(curScheme.tagFilter)), // 深拷贝，避免引用同一个对象；
+                keyword: curScheme.keyword,
+                dateRange: JSON.parse(JSON.stringify(curScheme.dateRange)),
+            });
+        }
+    }, [curScheme]);
 
     const handleSearch = () => {
         setCurScheme(tempFilterScheme);
