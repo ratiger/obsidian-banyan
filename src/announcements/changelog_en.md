@@ -1,5 +1,17 @@
 # 🚀 Banyan Changelog
 
+### 1.4.5
+
+Improvements
+- setting `Open After Start` now has separate PC and mobile options.
+- Now we can create a filter scheme based on the current search conditions.
+- The search condition now accord with the current filter scheme, so that we can searche based on the current filter scheme.
+- The title for multi-level tags is now clickable for each level of tag.
+- Filter condition display area:
+  - When a specific day is selected, the filter condition shows only the day's date instead of a date range.
+  - Tags are now clickable.
+- Now all dates of our notes can be viewed on the heatmap because we implemented a new heatmap component.
+
 ### 1.4.4
 
 Added
