@@ -1,0 +1,216 @@
+/* Container for the whole Heatmap widget */
+.custom-heatmap-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Header style containing title and controls */
+.custom-heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+    padding: 0 4px;
+}
+
+.custom-heatmap-title {
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.custom-heatmap-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Small elegant navigation buttons */
+.custom-heatmap-control-btn {
+    background: var(--background-secondary);
+    border: 1px solid var(--border-color, var(--background-modifier-border));
+    color: var(--text-normal);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    height: 18px;
+}
+
+.custom-heatmap-control-btn:hover {
+    background: var(--background-modifier-hover);
+    border-color: var(--text-muted);
+}
+
+.custom-heatmap-control-btn svg {
+    stroke: var(--text-muted);
+}
+
+.custom-heatmap-control-btn:hover svg {
+    stroke: var(--text-normal);
+}
+
+/* Scrollable area */
+.custom-heatmap-scroll-container {
+    overflow-x: auto;
+    width: 100%;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbar-thumb-bg, var(--background-modifier-border)) transparent;
+    padding-bottom: 4px;
+}
+
+.custom-heatmap-scroll-container.is-dragging {
+    cursor: grabbing;
+}
+
+/* We hide standard scrollbars on Webkit browsers for a cleaner look */
+.custom-heatmap-scroll-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.custom-heatmap-scroll-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-heatmap-scroll-container::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-bg, var(--background-modifier-border));
+    border-radius: 4px;
+}
+
+/* Wrapper to hold row sizes together */
+.custom-heatmap-content-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    padding: 4px;
+    min-width: max-content;
+}
+
+/* Month labels row layout */
+.custom-heatmap-months-row {
+    display: flex;
+    height: 14px;
+    margin-bottom: 4px;
+}
+
+.custom-heatmap-month-label-col {
+    position: relative;
+}
+
+.custom-heatmap-month-label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--text-muted);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+/* Days grid layout */
+.custom-heatmap-grid-row {
+    display: flex;
+}
+
+.custom-heatmap-week-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Day cell styling */
+.custom-heatmap-day-cell {
+    border-radius: 2px;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+/* Prevent clicking future days */
+.custom-heatmap-day-cell.is-future {
+    cursor: default;
+    opacity: 0.3;
+}
+
+/* Highlight today with a subtle border/outline */
+.custom-heatmap-day-cell.is-today {
+    outline: 1.5px solid var(--color-accent);
+    outline-offset: 1px;
+}
+
+/* Hover effects for interactive cells */
+.custom-heatmap-day-cell:not(.is-future):hover {
+    transform: scale(1.3);
+    z-index: 10;
+    box-shadow: 0 0 6px var(--color-accent);
+}
+
+/* Color scales mapped exactly as requested */
+.custom-heatmap-day-cell.color-scale-0 {
+    background-color: var(--background-primary-alt);
+}
+
+.custom-heatmap-day-cell.color-scale-1 {
+    background-color: color-mix(in srgb, var(--color-accent) 33%, var(--background-primary-alt) 66%);
+}
+
+.custom-heatmap-day-cell.color-scale-2 {
+    background-color: color-mix(in srgb, var(--color-accent) 66%, var(--background-primary-alt) 33%);
+}
+
+.custom-heatmap-day-cell.color-scale-3 {
+    background-color: var(--color-accent);
+}
+
+/* Footer / Legend */
+.custom-heatmap-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 6px;
+    padding: 0 4px;
+}
+
+.custom-heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.custom-heatmap-legend-text {
+    color: var(--text-muted);
+}
+
+.custom-heatmap-legend-cell {
+    border-radius: 2px;
+}
+
+.custom-heatmap-legend-cell.color-scale-0 {
+    background-color: var(--background-primary-alt);
+}
+
+.custom-heatmap-legend-cell.color-scale-1 {
+    background-color: color-mix(in srgb, var(--color-accent) 33%, var(--background-primary-alt) 66%);
+}
+
+.custom-heatmap-legend-cell.color-scale-2 {
+    background-color: color-mix(in srgb, var(--color-accent) 66%, var(--background-primary-alt) 33%);
+}
+
+.custom-heatmap-legend-cell.color-scale-3 {
+    background-color: var(--color-accent);
+}
+
+/* Tooltip layering */
+.custom-heatmap-tooltip {
+    z-index: 2001;
+    font-size: 10px !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+}

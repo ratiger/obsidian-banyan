@@ -4,6 +4,7 @@
 
 @import 'src/pages/sidebar/sidebar.css';
 @import 'src/pages/sidebar/heatmap/heatmap.css';
+@import 'src/pages/sidebar/heatmap/custom-heatmap.css';
 @import 'src/pages/sidebar/filterScheme/filterScheme.css';
 @import 'src/pages/sidebar/viewScheme/viewScheme.css';
 @import 'src/pages/sidebar/randomReview/randomReview.css';

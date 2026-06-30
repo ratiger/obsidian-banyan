@@ -1,4 +1,4 @@
-import { Heatmap } from 'src/pages/sidebar/heatmap/Heatmap';
+import { CustomHeatmap } from 'src/pages/sidebar/heatmap/CustomHeatmap';
 import { FilterSchemesInfo } from './filterScheme/FilterSchemesInfo';
 import { ViewSchemesInfo } from './viewScheme/ViewSchemesInfo';
 import { RandomReviewInfo } from './randomReview/RandomReviewInfo';
@@ -22,7 +22,7 @@ export const SidebarContent = () => {
     return (
         <div className="sidebar-content">
             <StatisticsInfo />
-            <Heatmap onCickDate={handleClickDate} />
+            <CustomHeatmap onCickDate={handleClickDate} />
             <div className="sidebar-margin-top" />
             <SidebarButton leftIconName="settings"
                 label={i18n.t('setting_panel')}
