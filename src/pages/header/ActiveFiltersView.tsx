@@ -35,7 +35,7 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
       const { from, to } = curScheme.dateRange;
       let dateStr = '';
       if (from && to) {
-        dateStr = `${from} ~ ${to}`;
+        dateStr = from === to ? from : `${from} ~ ${to}`;
       } else if (from) {
         dateStr = `>= ${from}`;
       } else if (to) {
