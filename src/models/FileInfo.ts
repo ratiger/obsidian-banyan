@@ -1,5 +1,4 @@
 import { App, getAllTags, TFile } from "obsidian";
-import { TagFilter } from "./TagFilter";
 
 export interface FileInfo {
   file: TFile;

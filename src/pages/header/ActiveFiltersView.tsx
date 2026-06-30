@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useMemo } from "react";
-import { FilterScheme, SearchFilterSchemeID } from "src/models/FilterScheme";
+import { FilterScheme, isSearchScheme } from "src/models/FilterScheme";
 import { ViewScheme } from "src/models/ViewScheme";
 import { isEmptyDateRange } from "src/models/DateRange";
 import { Icon } from "src/components/Icon";
@@ -21,7 +21,7 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
   const filterSchemes = useCombineStore((state) => state.filterSchemes);
   const createFilterScheme = useCombineStore((state) => state.createFilterScheme);
 
-  const isSearchScheme = curScheme.type === 'FilterScheme' && curScheme.id === SearchFilterSchemeID;
+  const isSearch = isSearchScheme(curScheme);
 
   const filterChips = useMemo(() => {
     if (curScheme.type !== 'FilterScheme') return [];
@@ -59,6 +59,50 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
       );
     }
 
+    const renderTagItem = (tag: string, isExclude = false) => {
+      const parts = tag.split('/');
+      const itemClass = `filter-chip-tag-item ${isExclude ? 'filter-chip-tag-item--exclude' : ''}`;
+      
+      if (parts.length <= 1) {
+        return (
+          <span
+            className={itemClass}
+            key={tag}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurSchemeToTag(tag);
+            }}
+          >
+            #{tag}
+          </span>
+        );
+      }
+      
+      return (
+        <span className={`${itemClass} filter-chip-tag-item-hierarchical`} key={tag}>
+          <span className="filter-chip-tag-hash">#</span>
+          {parts.map((part, index) => {
+            const cumulativeTag = parts.slice(0, index + 1).join('/');
+            const isLast = index === parts.length - 1;
+            return (
+              <React.Fragment key={index}>
+                <span
+                  className="filter-chip-tag-segment"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurSchemeToTag(cumulativeTag);
+                  }}
+                >
+                  {part}
+                </span>
+                {!isLast && <span className="filter-chip-tag-separator">/</span>}
+              </React.Fragment>
+            );
+          })}
+        </span>
+      );
+    };
+
     // 3. Tags - Include
     const activeOrRows = curScheme.tagFilter.or.filter(row => row.length > 0);
     activeOrRows.forEach((row, idx) => {
@@ -69,18 +113,7 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
             {idx === 0 ? i18n.t('tag_group_label_include') : i18n.t('tag_group_label_or_include')}
           </span>
           <div className="filter-chip-tags-list">
-            {row.map(tag => (
-              <span
-                className="filter-chip-tag-item"
-                key={tag}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurSchemeToTag(tag);
-                }}
-              >
-                #{tag}
-              </span>
-            ))}
+            {row.map(tag => renderTagItem(tag, false))}
           </div>
         </div>
       );
@@ -93,18 +126,7 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
           <Icon name="tag" size="s" />
           <span className="filter-chip-label filter-chip-label--exclude">{i18n.t('tag_group_label_exclude')}</span>
           <div className="filter-chip-tags-list">
-            {curScheme.tagFilter.not.map(tag => (
-              <span
-                className="filter-chip-tag-item filter-chip-tag-item--exclude"
-                key={tag}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurSchemeToTag(tag);
-                }}
-              >
-                #{tag}
-              </span>
-            ))}
+            {curScheme.tagFilter.not.map(tag => renderTagItem(tag, true))}
           </div>
         </div>
       );
@@ -133,7 +155,7 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
   if (filterChips.length === 0) return null;
 
   const handleClick = () => {
-    if (!isSearchScheme) return;
+    if (!isSearch) return;
     
     const maxId = filterSchemes.reduce((max, s) => Math.max(max, s.id), 0);
     const newScheme: FilterScheme = {
@@ -157,10 +179,10 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
 
   return (
     <div 
-      className={`dashboard-active-filters-bar ${isSearchScheme ? 'clickable-active-filters' : ''}`} 
+      className={`dashboard-active-filters-bar ${isSearch ? 'clickable-active-filters' : ''}`} 
       style={{ maxWidth: `${maxWidth}px` }}
-      onClick={isSearchScheme ? handleClick : undefined}
-      aria-label={isSearchScheme ? i18n.t('create_filter_scheme_from_search') || "Save search as filter scheme" : undefined}
+      onClick={isSearch ? handleClick : undefined}
+      aria-label={isSearch ? i18n.t('create_filter_scheme_from_search') || "Save search as filter scheme" : undefined}
     >
       <div className="active-filters-list">
         {filterChips}

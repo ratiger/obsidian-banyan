@@ -1,6 +1,6 @@
 import { createStore, StoreApi, useStore } from "zustand";
 import { createContext, useContext } from "react";
-import { FilterScheme, SearchFilterSchemeID, DefaultFilterSchemeID, getDefaultFilterScheme, createEmptySearchFilterScheme } from "src/models/FilterScheme";
+import { FilterScheme, getDefaultFilterScheme, createEmptyTagFilterScheme, isTempScheme } from "src/models/FilterScheme";
 import { ViewScheme } from "src/models/ViewScheme";
 import { FileInfo } from "src/models/FileInfo";
 import { isOKWithTagFilter } from "src/models/TagFilter";
@@ -43,7 +43,7 @@ export const createDashboardLocalStore = (plugin: BanyanPlugin) => {
         },
 
         setCurSchemeToTag: (tag: string) => {
-            const fs = createEmptySearchFilterScheme();
+            const fs = createEmptyTagFilterScheme();
             fs.tagFilter.or = [[tag]];
             fs.name = '#' + tag;
             get().setCurScheme(fs);
@@ -132,7 +132,7 @@ export const createDashboardLocalStore = (plugin: BanyanPlugin) => {
             } else {
                 const newSchemes = filterSchemes.map(scheme => {
                     if (scheme.id === newScheme.id) return newScheme;
-                    if (newScheme.id === SearchFilterSchemeID && scheme.id === DefaultFilterSchemeID) {
+                    if (isTempScheme(newScheme)) {
                         return { ...getDefaultFilterScheme(filterSchemes), pinned: newPinned };
                     }
                     return scheme;
@@ -180,7 +180,7 @@ export const createDashboardLocalStore = (plugin: BanyanPlugin) => {
                 const newScheme = filterSchemes.find(s => s.id === curScheme.id);
                 if (newScheme) {
                     updatedScheme = newScheme;
-                } else if (curScheme.id !== SearchFilterSchemeID) {
+                } else if (!isTempScheme(curScheme)) {
                     updatedScheme = getDefaultFilterScheme(filterSchemes);
                 }
             }

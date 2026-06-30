@@ -122,3 +122,30 @@
   border-color: var(--color-accent);
   box-shadow: 0 0 0 1px var(--color-accent);
 }
+
+.filter-chip-tag-item-hierarchical {
+  cursor: default;
+}
+
+.filter-chip-tag-item-hierarchical:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+.filter-chip-tag-item--exclude.filter-chip-tag-item-hierarchical:hover {
+  background-color: color-mix(in srgb, var(--text-error) 10%, transparent);
+}
+
+.filter-chip-tag-segment {
+  cursor: var(--cursor-link);
+  transition: opacity 0.15s ease;
+}
+
+.filter-chip-tag-segment:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.filter-chip-tag-separator {
+  margin: 0 1px;
+  opacity: 0.5;
+}
