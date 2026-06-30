@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useMemo } from "react";
-import { FilterScheme } from "src/models/FilterScheme";
+import { FilterScheme, SearchFilterSchemeID } from "src/models/FilterScheme";
 import { ViewScheme } from "src/models/ViewScheme";
 import { isEmptyDateRange } from "src/models/DateRange";
 import { Icon } from "src/components/Icon";
 import { i18n } from "src/utils/i18n";
-import { useDashboardLocalStore } from "src/store";
+import { useDashboardLocalStore, useCombineStore } from "src/store";
+import { FilterEditModal } from "../sidebar/filterScheme/FilterEditModal";
 
 export interface ActiveFiltersViewProps {
   curScheme: FilterScheme | ViewScheme;
@@ -14,6 +15,14 @@ export interface ActiveFiltersViewProps {
 
 export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme, colCount }) => {
   const setCurSchemeToTag = useDashboardLocalStore((state) => state.setCurSchemeToTag);
+  const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
+  const app = useCombineStore((state) => state.plugin.app);
+  const allTags = useCombineStore((state) => state.allTags);
+  const filterSchemes = useCombineStore((state) => state.filterSchemes);
+  const createFilterScheme = useCombineStore((state) => state.createFilterScheme);
+
+  const isSearchScheme = curScheme.type === 'FilterScheme' && curScheme.id === SearchFilterSchemeID;
+
   const filterChips = useMemo(() => {
     if (curScheme.type !== 'FilterScheme') return [];
 
@@ -64,7 +73,10 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
               <span
                 className="filter-chip-tag-item"
                 key={tag}
-                onClick={() => setCurSchemeToTag(tag)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurSchemeToTag(tag);
+                }}
               >
                 #{tag}
               </span>
@@ -85,7 +97,10 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
               <span
                 className="filter-chip-tag-item filter-chip-tag-item--exclude"
                 key={tag}
-                onClick={() => setCurSchemeToTag(tag)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setCurSchemeToTag(tag);
+                }}
               >
                 #{tag}
               </span>
@@ -112,13 +127,41 @@ export const ActiveFiltersView: React.FC<ActiveFiltersViewProps> = ({ curScheme,
   }, [curScheme, setCurSchemeToTag]);
 
   const maxWidth = useMemo(() => {
-    return colCount * 620 + (colCount - 1) * 16;
+    return colCount * 620 + (colCount - 1) * 16 - 8; // 多减8是为了让右边框不被遮挡
   }, [colCount]);
 
   if (filterChips.length === 0) return null;
 
+  const handleClick = () => {
+    if (!isSearchScheme) return;
+    
+    const maxId = filterSchemes.reduce((max, s) => Math.max(max, s.id), 0);
+    const newScheme: FilterScheme = {
+      ...(curScheme as FilterScheme),
+      id: maxId + 1,
+      name: '',
+      type: 'FilterScheme'
+    };
+
+    const modal = new FilterEditModal(app, {
+      filterScheme: newScheme,
+      allTags,
+      isNew: true,
+      onSave: (updatedScheme: FilterScheme) => {
+        createFilterScheme(updatedScheme);
+        setCurScheme(updatedScheme);
+      }
+    });
+    modal.open();
+  };
+
   return (
-    <div className="dashboard-active-filters-bar" style={{ maxWidth: `${maxWidth}px` }}>
+    <div 
+      className={`dashboard-active-filters-bar ${isSearchScheme ? 'clickable-active-filters' : ''}`} 
+      style={{ maxWidth: `${maxWidth}px` }}
+      onClick={isSearchScheme ? handleClick : undefined}
+      aria-label={isSearchScheme ? i18n.t('create_filter_scheme_from_search') || "Save search as filter scheme" : undefined}
+    >
       <div className="active-filters-list">
         {filterChips}
       </div>

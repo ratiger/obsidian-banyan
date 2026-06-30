@@ -109,3 +109,16 @@
     height: auto;
   }
 }
+
+.dashboard-active-filters-bar.clickable-active-filters {
+  cursor: pointer;
+  border-radius: var(--radius-s);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-active-filters-bar.clickable-active-filters:hover {
+  border-radius: var(--radius-s);
+  background-color: var(--background-modifier-hover);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}

@@ -47,9 +47,11 @@ export default {
     filter_scheme_title_create: "Create filter scheme",
     filter_scheme_name_label: "Name",
     filter_scheme_name_placeholder: "Please input the name",
+    filter_scheme_name_empty_warning: "Name cannot be empty",
     filter_scheme_date_label: "Date",
     filter_scheme_keyword_label: "Keyword",
     filter_scheme_keyword_placeholder: "You can input the keyword",
+    create_filter_scheme_from_search: "Save search conditions as filter scheme",
 
     // 视图编辑区
     view_scheme_title_update: "Update view scheme",

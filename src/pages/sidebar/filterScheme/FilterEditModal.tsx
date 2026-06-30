@@ -1,4 +1,4 @@
-import { App, Modal, Platform } from "obsidian";
+import { App, Modal, Platform, Notice } from "obsidian";
 import { FilterScheme } from "src/models/FilterScheme";
 import { FilterView } from "./FilterView";
 import * as React from "react";
@@ -38,6 +38,10 @@ const FilterViewContainer = ({ props, close }: { props: FilterEditModalProps, cl
     const { filterScheme, allTags, onSave, isNew } = props;
     const [scheme, setScheme] = React.useState(filterScheme);
     const handleSave = () => {
+        if (!scheme.name || scheme.name.trim() === "") {
+            new Notice(i18n.t('filter_scheme_name_empty_warning'));
+            return;
+        }
         onSave(scheme);
         close();
     };

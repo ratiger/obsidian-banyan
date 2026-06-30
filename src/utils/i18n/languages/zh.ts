@@ -47,9 +47,11 @@ export default {
     filter_scheme_title_create: "创建过滤方案",
     filter_scheme_name_label: "名称",
     filter_scheme_name_placeholder: "请输入名称",
+    filter_scheme_name_empty_warning: "名称不能为空",
     filter_scheme_date_label: "日期",
     filter_scheme_keyword_label: "关键字",
     filter_scheme_keyword_placeholder: "你可以输入关键字",
+    create_filter_scheme_from_search: "将搜索条件创建为过滤方案",
 
     // 视图编辑区
     view_scheme_title_update: "更新视图",
