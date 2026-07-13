@@ -89,6 +89,11 @@ Feel free to ask questions or make suggestions on GitHub!
 
 Or join this project's Discord: https://discord.gg/HGCmK8YzaX
 
+## ❤️ Support me
+
+- 🇨🇳 [ratiger - Afadian](https://afdian.com/a/ratiger) 
+- 🌍 [ratiger - Ko-fi](https://ko-fi.com/ratiger) 
+
 ## License
 
 GPLv3 - See [LICENSE](LICENSE) file for details

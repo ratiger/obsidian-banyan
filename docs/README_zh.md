@@ -89,6 +89,11 @@
 
 或者加入此项目的discord: https://discord.gg/HGCmK8YzaX
 
+## ❤️ 支持我
+
+- 🇨🇳 [ratiger - 爱发电（Afadian）](https://afdian.com/a/ratiger) 
+- 🌍 [ratiger - Ko-fi](https://ko-fi.com/ratiger) 
+
 ## 许可证
 
 GPLv3 - 详情看 [LICENSE](LICENSE) 文件
