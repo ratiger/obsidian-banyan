@@ -214,3 +214,50 @@
     padding: 4px 8px !important;
     border-radius: 4px !important;
 }
+
+/* Scrollbar custom arrow buttons */
+.custom-heatmap-scroll-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.custom-heatmap-arrow-btn {
+    position: absolute;
+    bottom: 0px;
+    height: 12px;
+    width: 12px;
+    background: var(--background-primary-alt);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0.8;
+    transition: opacity 0.15s ease, background-color 0.15s ease;
+    padding: 0;
+}
+
+.custom-heatmap-arrow-btn:hover {
+    opacity: 1;
+    background: var(--background-modifier-hover);
+}
+
+.custom-heatmap-arrow-btn.is-disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.custom-heatmap-arrow-btn.left {
+    left: 2px;
+}
+
+.custom-heatmap-arrow-btn.right {
+    right: 2px;
+}
+
+.custom-heatmap-arrow-btn div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
