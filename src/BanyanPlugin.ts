@@ -68,7 +68,7 @@ export default class BanyanPlugin extends Plugin {
 			name: i18n.t('open_dashboard'),
 			callback: () => this.activateView(CARD_DASHBOARD_VIEW_TYPE),
 		});
-		this.addRibbonIcon('wallet-cards', i18n.t('open_dashboard'), () => {
+		this.addRibbonIcon('trees', i18n.t('open_dashboard'), () => {
 			this.activateView(CARD_DASHBOARD_VIEW_TYPE);
 		});
 

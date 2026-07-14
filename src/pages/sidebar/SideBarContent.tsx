@@ -9,6 +9,7 @@ import { useMemo, useState } from 'react';
 import { SidebarButton } from './SidebarButton';
 import { SidebarSwitchButton } from './SidebarSwitchButton';
 import { Platform } from 'obsidian';
+import { Icon } from 'src/components/Icon';
 
 export const SidebarContent = () => {
     const setCurScheme = useDashboardLocalStore((state) => state.setCurScheme);
@@ -21,6 +22,10 @@ export const SidebarContent = () => {
 
     return (
         <div className="sidebar-content">
+            <div className="sidebar-brand-container">
+                <Icon name="trees" size="xl" className="sidebar-brand-icon" color='var(--text-normal)' />
+                <span className="sidebar-brand-name">Banyan</span>
+            </div>
             <StatisticsInfo />
             <CustomHeatmap onCickDate={handleClickDate} />
             <div className="sidebar-margin-top" />

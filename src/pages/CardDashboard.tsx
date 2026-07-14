@@ -40,7 +40,7 @@ export class CardDashboard extends ItemView {
   }
 
   getIcon(): string {
-    return 'wallet-cards';
+    return 'trees';
   }
 
   async onOpen() {
