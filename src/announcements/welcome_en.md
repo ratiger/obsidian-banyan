@@ -1,25 +1,44 @@
 # 🌲 Welcome to Banyan
 
-Banyan allows you to visualize your notes through a card view and retrieve them using a tag-based filtering system, rather than a traditional tree directory.
+Banyan offers an intuitive card view to display your notes, uses tags for organization, and relies on tag-centric filtering schemes for effortless note retrieval.
 
-### 🚀 Getting Started
+## 🚀 Banyan User Guide
 
-This plugin only manages notes within the `Notes Directory` (defaulted to `cards`).  
-The storage structure of notes and subdirectories within this folder is no longer important.
-The `banyan_config` under the "Notes Directory" stores plugin configuration files. It cannot be hidden for now, as setting it to a hidden directory will cause the MD files within it to fail to load.
+### 📌 Core Philosophy
 
-The Card Panel displays notes chronologically and allows you to view specific notes through filtering schemes.  
-Filters include tags, dates, and keywords. Tags can be combined using **"OR, AND, NOT"** logic to create powerful filtering combinations.  
-Click the **Card Icon** 🗂️ in the functional area to open the Card Panel.
+Traditional File Tree: You have to specificed the location, such as `Psychology/Adler/Courage.md`.
 
-Click the **Lightbulb Icon** 💡 in the functional area to create a new note.  
-The current time is used as the default title, but you can modify it as you wish.  
-New notes are stored by default in a `Year/Quarter/Month/Day` hierarchy—though the hierarchy is secondary, you can customize the storage directory in the settings.
+Banyan: The location of notes no longer matters. The card panel displays notes in chronological order, allowing you to quickly locate your target note using Tags, Dates, and Keywords.
+When creating a note, your focus shifts from "Where should I put this?" to "What does this belong to?" For example, by tagging it `#Psychology/Adler #Reading #Progress/Doing`, you might later access the note in many different ways.
 
-*Please feel free to explore more. Happy learning in your forest of knowledge!*
+### ⚡ Quick Start
 
-### 📮 Contact Me
+1. Notes Directory
+The plugin only manages files within the designated `Notes directory` (the default is `cards`). You can change this to any folder in your vault via the settings.
 
-github issue: [obsidian-banyan - ratiger | Github](https://github.com/ratiger/obsidian-banyan)
-email: 2084939306@qq.com
-rednote: ratiger (rednote number: 1392996322)
+2. Create Your First Note
+- New notes' title default to the current time, but you can change it freely.
+- Tags added in the note editor will be as the note's property `tags`.
+- The plugin use tags in the `tags` property (frontmatter) and the main content for filtering.
+
+3. Filter by Tags
+- Supports "OR, AND, NOT" logic combinations. For instance, you can filter for notes in `#Project/A` OR `#Project/B` that are `#Progress/Doing` and **NOT** `#Urgent`.
+- You can also combine tag filters with Date Ranges and Keywords for filter.
+
+4. Advanced Settings
+- Custom Storage Path: By default, new notes are stored in a Year/Quarter/Month/Day folder hierarchy. While the location is irrelevant, you can fully customize the path in the settings.
+- Config Directory: A `banyan_config` folder is automatically generated in the root of your `Notes Directory` to store the plugin's configuration files. It currently cannot be hidden, as doing so prevents the Markdown files inside from being read properly.
+
+### 💡 Try It Out Now!
+Create a new note, add the `#Progress/Todo` tag, create a filtering scheme containing `#Progress/Todo` in the card panel sidebar, and click on it to see it in action!
+
+## 📮 Contact Me
+
+Github issue: [obsidian-banyan - ratiger | Github](https://github.com/ratiger/obsidian-banyan)  
+Email: 2084939306@qq.com  
+RedNote: ratiger (rednote number: 1392996322)  
+
+## ❤️ Support me
+
+- 🇨🇳 [ratiger - Afadian](https://afdian.com/a/ratiger) 
+- 🌍 [ratiger - Ko-fi](https://ko-fi.com/ratiger) 

@@ -86,8 +86,11 @@ You can even use random browsing to meet your past selves from different periods
 ## Questions?
 
 Feel free to ask questions or make suggestions on GitHub!
+Github issue: [obsidian-banyan - ratiger | Github](https://github.com/ratiger/obsidian-banyan)
 
-Or join this project's Discord: https://discord.gg/HGCmK8YzaX
+Or contact me via:
+- Email: 2084939306@qq.com
+- RedNote: ratiger (rednote number: 1392996322)
 
 ## ❤️ Support me
 

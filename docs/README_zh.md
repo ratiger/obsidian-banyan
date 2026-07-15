@@ -86,8 +86,11 @@
 ## 有问题？
 
 欢迎在 GitHub 上提问题或建议！
+Github issue: [obsidian-banyan - ratiger | Github](https://github.com/ratiger/obsidian-banyan)
 
-或者加入此项目的discord: https://discord.gg/HGCmK8YzaX
+或者通过以下方式联系我:
+- 邮箱: 2084939306@qq.com
+- 小红书: ratiger (小红书号: 1392996322)
 
 ## ❤️ 支持我
 
