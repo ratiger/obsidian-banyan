@@ -3,7 +3,8 @@ import BanyanPlugin from "src/main";
 import { StrictMode, useEffect, useState, useCallback, useMemo } from 'react';
 import { Root, createRoot } from 'react-dom/client';
 import * as React from "react";
-import CardNote from "./cards/CardNote";
+import PreviewCardNote from "./cards/PreviewCardNote";
+import RenderCardNote from "./cards/RenderCardNote";
 import { Icon } from "src/components/Icon";
 import Sidebar from "./sidebar/Sidebar";
 import { DefaultFilterSchemeID } from "src/models/FilterScheme";
@@ -97,6 +98,7 @@ const CardDashboardInner = ({ plugin }: { plugin: BanyanPlugin }) => {
 
   const cardsDirectory = useCombineStore((state) => state.settings.cardsDirectory);
   const useCardNote2 = useCombineStore((state) => state.settings.useCardNote2);
+  const useMarkdownRender = useCombineStore((state) => state.settings.useMarkdownRender);
   const enableViewSchemes = useCombineStore((state) => state.settings.enableViewSchemes);
 
   const sortType = useCombineStore((state) => state.appData.sortType) || 'created';
@@ -168,10 +170,14 @@ const CardDashboardInner = ({ plugin }: { plugin: BanyanPlugin }) => {
     const isPinned = curScheme.pinned.includes(f.file.path);
     return (
       <div ref={isLastCard ? lastCardElementRef : null} key={f.file.path} className={`card-note ${colCount == 'small' ? 'small' : ''}`}>
-        <CardNote fileInfo={f} isPinned={isPinned} editable={!Platform.isMobile && useCardNote2} />
+        {useMarkdownRender ? (
+          <RenderCardNote fileInfo={f} isPinned={isPinned} editable={!Platform.isMobile && useCardNote2} />
+        ) : (
+          <PreviewCardNote fileInfo={f} isPinned={isPinned} editable={!Platform.isMobile && useCardNote2} />
+        )}
       </div>
     );
-  }), [displayFiles, curScheme.pinned, lastCardElementRef, useCardNote2, colCount]);
+  }), [displayFiles, curScheme.pinned, lastCardElementRef, useCardNote2, useMarkdownRender, colCount]);
   const isNotEmpty = displayFiles.length > 0;
 
   return (

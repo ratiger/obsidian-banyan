@@ -14,6 +14,7 @@ export interface BanyanPluginSettings {
 	cardContentMaxHeight?: CardContentMaxHeightType;
 	showBacklinksInCardNote?: boolean;
 	useCardNote2?: boolean;
+	useMarkdownRender?: boolean;
 
 	// add note 
 	useZkPrefixerFormat?: boolean;
@@ -47,6 +48,7 @@ export const DEFAULT_SETTINGS: BanyanPluginSettings = {
 	cardContentMaxHeight: 'normal',
 	showBacklinksInCardNote: false,
 	useCardNote2: false,
+	useMarkdownRender: false,
 
 	// add note
 	useZkPrefixerFormat: false,

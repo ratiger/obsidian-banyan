@@ -90,8 +90,13 @@ export default {
 
     setting_show_backlinks_name: "Show backlinks",
     setting_show_backlinks_desc: "Whether to show backlinks (which notes reference this) in card view.",
+
     setting_use_cardnote2_name: "Double click to edit (PC only)",
     setting_use_cardnote2_desc: "In editing mode, changes are saved immediately, and the confirm button is only used to return to reading mode.",
+
+    setting_use_markdown_render_name: "Display card view by rendering text (experimental)",
+    setting_use_markdown_render_desc: "This may reduce layout issues and display lag.",
+
     setting_use_zk_prefixer_format_name: "Use the format in \"Unique note creator\" plugin for new notes filename",
     setting_use_zk_prefixer_format_desc: "If enabled, new notes will use the naming format from the plugin if available. Use the default format else.",
 

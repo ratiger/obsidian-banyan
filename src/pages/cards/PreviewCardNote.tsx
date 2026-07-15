@@ -138,13 +138,13 @@ const NoteContentView = ({ app, fileInfo, editMode = false, endEdit }: NoteConte
 
 // ─── CardNote ──────────────────────────────────────────────────────────
 
-interface CardNoteProps {
+interface PreviewCardNoteProps {
   fileInfo: FileInfo;
   isPinned: boolean;
   editable?: boolean;
 }
 
-const CardNote = ({ fileInfo, isPinned, editable = false }: CardNoteProps) => {
+const PreviewCardNote = ({ fileInfo, isPinned, editable = false }: PreviewCardNoteProps) => {
 
   const plugin = useCombineStore((state) => state.plugin);
   const showBacklinksInCardNote = useCombineStore((state) => state.settings.showBacklinksInCardNote);
@@ -214,4 +214,4 @@ const CardNote = ({ fileInfo, isPinned, editable = false }: CardNoteProps) => {
   );
 };
 
-export default CardNote;
+export default PreviewCardNote;

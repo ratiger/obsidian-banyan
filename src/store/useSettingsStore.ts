@@ -23,6 +23,7 @@ export interface SettingsState {
     updateFirstUseDate: (date: string) => void;
     updateShowBacklinksInCardNote: (show: boolean) => void;
     updateUseCardNote2: (use: boolean) => void;
+    updateUseMarkdownRender: (use: boolean) => void;
     updateRandomBrowse: (randomBrowse: boolean) => void;
     updateUseZkPrefixerFormat: (use: boolean) => void;
     updateShowAddNoteRibbonIcon: (show: boolean) => void;
@@ -101,6 +102,9 @@ export const useSettingsStore: StateCreator<CombineState, [], [], SettingsState>
     },
     updateUseCardNote2: (use: boolean) => {
         get().updateSettings({ useCardNote2: use });
+    },
+    updateUseMarkdownRender: (use: boolean) => {
+        get().updateSettings({ useMarkdownRender: use });
     },
     updateRandomBrowse: (randomBrowse: boolean) => {
         get().updateAppData({ randomBrowse });

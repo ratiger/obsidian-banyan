@@ -93,6 +93,9 @@ export default {
 
     setting_use_cardnote2_name: "双击进入编辑模式（仅限桌面端）",
     setting_use_cardnote2_desc: "编辑模式下改动立即保存，确认按钮仅用于恢复阅读模式。",
+    
+    setting_use_markdown_render_name: "使用渲染文本的方式显示卡片视图（实验中）",
+    setting_use_markdown_render_desc: "这种方案可能会减少布局和显示卡顿问题。",
 
     setting_use_zk_prefixer_format_name: "默认文件名使用「时间戳笔记生成器」的格式",
     setting_use_zk_prefixer_format_desc: "开启后，新建笔记的默认文件名会使用时间戳笔记插件的命名格式。关闭则使用默认格式。",

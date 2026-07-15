@@ -33,6 +33,7 @@ export class BanyanSettingTab extends PluginSettingTab {
 		this.setupCardContentMaxHeightSetting(containerEl);
 		this.setupShowBacklinksSetting(containerEl);
 		this.setupUseCardNote2Setting(containerEl);
+		this.setupUseMarkdownRenderSetting(containerEl);
 
 		// 编辑
 		new Setting(containerEl).setName(i18n.t('setting_header_editor')).setHeading();
@@ -180,6 +181,19 @@ export class BanyanSettingTab extends PluginSettingTab {
 				toggle.setValue(settings.useCardNote2 ?? false)
 					.onChange(async (value) => {
 						useCombineStore.getState().updateUseCardNote2(value);
+					});
+			});
+	}
+
+	setupUseMarkdownRenderSetting(containerEl: HTMLElement) {
+		const settings = useCombineStore.getState().settings;
+		new Setting(containerEl)
+			.setName(i18n.t('setting_use_markdown_render_name'))
+			.setDesc(i18n.t('setting_use_markdown_render_desc'))
+			.addToggle(toggle => {
+				toggle.setValue(settings.useMarkdownRender ?? true)
+					.onChange(async (value) => {
+						useCombineStore.getState().updateUseMarkdownRender(value);
 					});
 			});
 	}
