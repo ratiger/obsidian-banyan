@@ -249,7 +249,7 @@ const NoteContentViewRender = ({ app, fileInfo, editMode = false, endEdit }: Not
       )}
       {isExpanded && cardContentMaxHeight !== 'expand' && (
         <div
-          className="card-note-expand-button"
+          className="card-note-collapse-button"
           onClick={handleExpandToggle}
         >
           {i18n.t('general_collapse')}
