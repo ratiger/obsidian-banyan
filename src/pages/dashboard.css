@@ -48,21 +48,17 @@
   grid-template-columns: repeat(2, 620px);
 }
 
-/* 桌面设备 */
-@media (min-width: 768px) {
-
-}
-
-/* 移动设备 */
-@media (max-width: 767px) {
-
-  .workspace-leaf-content[data-type="dashboard-view"] .view-content {
-    padding-bottom: 0 !important;
-  }
-}
-
 .cards-loading {
   text-align: center;
   padding: 20px;
   color: var(--text-muted);
+}
+
+/* 移动设备 */
+.is-mobile .workspace-leaf-content[data-type="dashboard-view"] .view-content { /* .is */
+  padding-bottom: 0 !important;
+}
+
+.is-mobile .workspace-leaf-content[data-type="dashboard-view"] .main {
+  padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px));
 }
