@@ -1,5 +1,14 @@
 # 🚀 Banyan Changelog
 
+### 1.4.7
+
+Fixes
+
+- Now the `Collapse` button won'bt be obscured by tabbar on mobile. 
+- In the card view, when the note text starts with an ordered/unordered/todo list, it no longer overlaps with titles or tags.  
+- The title bar now correctly stays pinned to the top.
+- The heatmap now defaults to the far right (latest date), and its data loading has been optimized to load one year of data first.
+
 ### 1.4.6
 
 Improvements
@@ -27,7 +36,7 @@ Added
 - Now we can open multiple dashboard tabs. 
 - Now the condition of filter scheme or search will be shown above card list.
 
-Fix
+Fixes
 
 - The add note floating button may be obscured on some devices.
 - The card list may not refresh after some note updates.
