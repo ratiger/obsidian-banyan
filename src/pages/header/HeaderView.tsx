@@ -68,7 +68,7 @@ export const HeaderView: React.FC<HeaderViewProps> = ({
           <Icon name="menu" />
         </button>
         {curScheme.id === DefaultFilterSchemeID && (
-          <div className="header-main-title-content">{curScheme.name}</div>
+          <div className="header-main-title-content">{i18n.t('all_notes')}</div>
         )}
         {curScheme.id !== DefaultFilterSchemeID && (
           <div className="header-main-title-container">
@@ -78,7 +78,7 @@ export const HeaderView: React.FC<HeaderViewProps> = ({
                 setCurScheme(getDefaultFilterScheme(filterSchemes));
               }}
             >
-              {getDefaultFilterScheme(filterSchemes).name}
+              {i18n.t('all_notes')}
             </div>
             <div className="header-main-title-separator">{'/'}</div>
             {tagSchemeActive ? (
