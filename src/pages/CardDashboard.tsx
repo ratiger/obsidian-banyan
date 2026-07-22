@@ -184,14 +184,14 @@ const CardDashboardInner = ({ plugin }: { plugin: BanyanPlugin }) => {
     <div className="dashboard" ref={dashboardRef}>
       <Sidebar showSidebar={showSidebar} onClose={() => setShowSidebar('hide')} />
       <div className="main" ref={mainContainerRef}>
+        <HeaderView
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
+          curScheme={curScheme}
+          filterSchemes={filterSchemes}
+          setCurScheme={setCurScheme}
+        />
         <div className="header">
-          <HeaderView
-            showSidebar={showSidebar}
-            setShowSidebar={setShowSidebar}
-            curScheme={curScheme}
-            filterSchemes={filterSchemes}
-            setCurScheme={setCurScheme}
-          />
           {!Platform.isMobile && <div className="header-main-add-note-container"><AddNoteView app={app} plugin={plugin} onAdd={handleRefresh} /></div>}
           <div className="header-sub-container">
             <div className="header-sub-info">
