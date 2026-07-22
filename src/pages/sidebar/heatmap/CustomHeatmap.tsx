@@ -43,12 +43,14 @@ export const CustomHeatmap = ({
         return d;
     }, []);
 
-    const earliestDate = useMemo(() => {
-        // Default to 1 year ago (52 weeks ago)
+    // Number of weeks currently rendered (starts with 52 weeks = 1 year)
+    const [renderedWeeksCount, setRenderedWeeksCount] = useState(52);
+
+    // Calculate total earliest date across all files and first use date
+    const earliestTotalDate = useMemo(() => {
         let d = new Date(today);
         d.setFullYear(today.getFullYear() - 1);
 
-        // Find the earliest file date in values
         if (values && values.length > 0) {
             values.forEach(v => {
                 const dateVal = new Date(v.date);
@@ -58,7 +60,6 @@ export const CustomHeatmap = ({
             });
         }
 
-        // Check first use date
         if (firstUseDateStr) {
             const fud = new Date(firstUseDateStr);
             if (!isNaN(fud.getTime()) && fud < d) {
@@ -67,6 +68,24 @@ export const CustomHeatmap = ({
         }
         return d;
     }, [values, firstUseDateStr, today]);
+
+    // Current start date based on renderedWeeksCount
+    const earliestDate = useMemo(() => {
+        const d = new Date(today);
+        d.setDate(d.getDate() - (renderedWeeksCount * 7));
+
+        if (d < earliestTotalDate) {
+            return earliestTotalDate;
+        }
+        return d;
+    }, [today, renderedWeeksCount, earliestTotalDate]);
+
+    // Check if there are earlier dates not yet rendered
+    const hasMoreHistory = useMemo(() => {
+        const d = new Date(today);
+        d.setDate(d.getDate() - (renderedWeeksCount * 7));
+        return d > earliestTotalDate;
+    }, [today, renderedWeeksCount, earliestTotalDate]);
 
     // Align to Sunday of start week
     const startOfWeek = useMemo(() => {
@@ -210,39 +229,92 @@ export const CustomHeatmap = ({
     // Scroll control ref
     const containerRef = useRef<HTMLDivElement>(null);
     const hasScrolledRef = useRef(false);
+    const prevScrollWidthRef = useRef<number | null>(null);
 
     const [canScrollLeft, setCanScrollLeft] = useState(false);
     const [canScrollRight, setCanScrollRight] = useState(false);
 
+    const loadMoreHistory = () => {
+        if (!hasMoreHistory) return;
+        if (containerRef.current) {
+            prevScrollWidthRef.current = containerRef.current.scrollWidth;
+        }
+        setRenderedWeeksCount(prev => prev + 52);
+    };
+
     const updateScrollButtons = () => {
         if (containerRef.current) {
             const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-            setCanScrollLeft(scrollLeft > 1);
+            setCanScrollLeft(scrollLeft > 1 || hasMoreHistory);
             setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+
+            // Auto-load earlier history when user scrolls near the left boundary
+            if (scrollLeft < 60 && hasMoreHistory) {
+                loadMoreHistory();
+            }
         }
     };
 
+    // Adjust scroll position after prepending earlier weeks to maintain visual position
+    useEffect(() => {
+        if (containerRef.current && prevScrollWidthRef.current !== null) {
+            const newScrollWidth = containerRef.current.scrollWidth;
+            const diff = newScrollWidth - prevScrollWidthRef.current;
+            if (diff > 0) {
+                containerRef.current.scrollLeft += diff;
+            }
+            prevScrollWidthRef.current = null;
+        }
+    }, [weeks]);
+
     useEffect(() => {
         const container = containerRef.current;
-        if (container) {
-            container.addEventListener('scroll', updateScrollButtons);
-            updateScrollButtons();
+        if (!container) return;
+
+        const handleScroll = () => updateScrollButtons();
+        container.addEventListener('scroll', handleScroll);
+        updateScrollButtons();
+
+        let resizeObserver: ResizeObserver | null = null;
+        if (typeof ResizeObserver !== 'undefined') {
+            resizeObserver = new ResizeObserver(() => {
+                if (!hasScrolledRef.current && container.scrollWidth > container.clientWidth) {
+                    container.scrollLeft = container.scrollWidth;
+                    hasScrolledRef.current = true;
+                }
+                updateScrollButtons();
+            });
+            resizeObserver.observe(container);
         }
+
         return () => {
-            if (container) {
-                container.removeEventListener('scroll', updateScrollButtons);
+            container.removeEventListener('scroll', handleScroll);
+            if (resizeObserver) {
+                resizeObserver.disconnect();
             }
         };
-    }, [weeks]);
+    }, [weeks, hasMoreHistory]);
 
     // Initial scroll to today (far right)
     useEffect(() => {
-        if (containerRef.current && weeks.length > 0) {
-            if (!hasScrolledRef.current) {
-                containerRef.current.scrollLeft = containerRef.current.scrollWidth;
-                hasScrolledRef.current = true;
+        const scrollToRight = () => {
+            if (containerRef.current) {
+                const { scrollWidth, clientWidth } = containerRef.current;
+                if (scrollWidth > 0) {
+                    containerRef.current.scrollLeft = scrollWidth;
+                    if (scrollWidth > clientWidth) {
+                        hasScrolledRef.current = true;
+                    }
+                }
+                updateScrollButtons();
             }
-            updateScrollButtons();
+        };
+
+        if (containerRef.current && weeks.length > 0 && !hasScrolledRef.current) {
+            const rafId = requestAnimationFrame(() => {
+                requestAnimationFrame(scrollToRight);
+            });
+            return () => cancelAnimationFrame(rafId);
         }
     }, [weeks.length]);
 
@@ -273,6 +345,9 @@ export const CustomHeatmap = ({
 
     const handleScrollLeft = () => {
         if (containerRef.current) {
+            if (containerRef.current.scrollLeft < 60 && hasMoreHistory) {
+                loadMoreHistory();
+            }
             const scrollAmount = (cellSize + gapSize) * 12; // approx 3 months
             containerRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
         }
