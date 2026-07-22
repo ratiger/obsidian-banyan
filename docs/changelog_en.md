@@ -1,8 +1,16 @@
 # 🚀 Banyan Changelog
 
+### 1.4.6
+
+Improvements
+
+- (experimental) Now card views can be displayed by rendering text. This implementation may help reduce layout issues and display lag; enabled by default, you can disable it in the settings.
+- Now the `Collapse` button will always remain visible within the view when a card view is expanded and its content is too long.
+
 ### 1.4.5
 
 Improvements
+
 - setting `Open After Start` now has separate PC and mobile options.
 - Now we can create a filter scheme based on the current search conditions.
 - The search condition now accord with the current filter scheme, so that we can searche based on the current filter scheme.
