@@ -31,6 +31,10 @@
   transition: max-height 0.3s ease;
 }
 
+.card-note-content.card-note-content--render {
+  margin-top: -8px; /* 这种渲染方式开头会多16的边距；而之前是8，现在减8，从而得到8。 */
+}
+
 .card-note-content.card-note-content--short {
   max-height: 160px;
 }

@@ -190,7 +190,7 @@ const NoteContentViewRender = ({ app, fileInfo, editMode = false, endEdit }: Not
   };
 
   const getContentClassName = () => {
-    let className = "card-note-content";
+    let className = "card-note-content card-note-content--render ";
     if (isExpanded) {
       className += " card-note-content--expanded";
     } else if (cardContentMaxHeight === 'expand') {
