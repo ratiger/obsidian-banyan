@@ -4,6 +4,7 @@ import { CardNoteMenuButton, openCardNoteMoreMenu } from "./CardNoteMenu";
 import { i18n } from "src/utils/i18n";
 import { useCombineStore, useDashboardLocalStore } from "src/store";
 import { FileInfo } from "src/models/FileInfo";
+import { TFile } from "obsidian";
 import { Icon } from "src/components/Icon";
 import CardNoteBacklinksView from "./CardNoteBacklinksView";
 
@@ -15,6 +16,24 @@ interface NoteContentViewRenderProps {
   editMode?: boolean;
   endEdit?: () => void;
 }
+
+const formatBaseName = (baseName: string): string => {
+  const [datePart, timePart] = baseName.split(" ");
+  const [year, month, day] = datePart.split("-").map(Number);
+  const [hour, minute, second] = timePart.split("-").map(Number);
+
+  const date = new Date(year, month - 1, day, hour, minute, second);
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
+  });
+};
+
 
 const NoteContentViewRender = ({ app, fileInfo, editMode = false, endEdit }: NoteContentViewRenderProps) => {
   const ref = React.useRef<HTMLDivElement>(null);
@@ -279,6 +298,7 @@ const RenderCardNote = ({ fileInfo, isPinned, editable = false }: RenderCardNote
   const app = plugin.app;
   const isCreated = sortType === 'created' || sortType === 'earliestCreated';
   const tags = fileInfo.tags;
+  const useFilenameAsTime = useCombineStore((state) => state.settings.useFilenameAsTime);
 
   const addEditingFile = useCombineStore((state) => state.addEditingFile);
   const deleteEditingFile = useCombineStore((state) => state.deleteEditingFile);
@@ -315,7 +335,9 @@ const RenderCardNote = ({ fileInfo, isPinned, editable = false }: RenderCardNote
           <div className="card-note-time">
             {isPinned ? `${i18n.t('general_pin')} · ` : ""}
             {isCreated ? i18n.t('created_at') : i18n.t('updated_at')}{" "}
-            {new Date(isCreated ? fileInfo.file.stat.ctime : fileInfo.file.stat.mtime).toLocaleString()}
+            {useFilenameAsTime
+              ? formatBaseName(fileInfo.file.basename)
+              : new Date(isCreated ? fileInfo.file.stat.ctime : fileInfo.file.stat.mtime).toLocaleString()}
           </div>
           {shouldShowTitle(fileInfo.file.basename) && (
             <div className="card-note-title">

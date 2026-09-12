@@ -121,6 +121,8 @@ export default {
 
     setting_enable_random_review_name: "Enable \"Random review\"",
     setting_enable_random_review_desc: "Most of the use cases of this feature are replaced by \"Random browse\". So we are considering removing it.",
+    setting_use_filename_as_time_name: "Render time from filename",
+    setting_use_filename_as_time_desc: "When enabled, the card header time will try to parse and display from the filename (e.g. 2026-09-12 14-49-34) instead of the file's modification time.",
 
     // font
     setting_font_theme_name: "Font size",
