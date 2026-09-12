@@ -33,6 +33,7 @@ export interface SettingsState {
     updateCustomNewNoteLocation: (directory: string) => void;
     updateEnableViewSchemes: (enable: boolean) => void;
     updateEnableRandomReview: (enable: boolean) => void;
+    updateUseFilenameAsTime: (use: boolean) => void; 
 
     // UI state updates
     updateFilterSchemesExpanded: (expanded: boolean) => void;
@@ -135,6 +136,9 @@ export const useSettingsStore: StateCreator<CombineState, [], [], SettingsState>
         const plugin = get().plugin;
         plugin.resetRandomReview();
         plugin.setupRandomReview();
+    },
+    updateUseFilenameAsTime: (use: boolean) => {
+        get().updateSettings({ useFilenameAsTime: use });
     },
 
     // UI state updates

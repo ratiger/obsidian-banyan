@@ -121,6 +121,8 @@ export default {
 
     setting_enable_random_review_name: "启用「随机回顾」功能",
     setting_enable_random_review_desc: "该功能的使用场景更多被「乱序浏览」替代了，故正考虑下掉该功能。",
+    "setting_use_filename_as_time_name": "用文件名渲染时间",
+    "setting_use_filename_as_time_desc": "开启后，卡片头部的时间将尝试从文件名（如 2026-09-12 14-49-34）解析显示，而不是使用文件系统的修改时间。",
 
     // 字体
     setting_font_theme_name: "内容区域字体大小",

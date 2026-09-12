@@ -15,6 +15,7 @@ export interface BanyanPluginSettings {
 	showBacklinksInCardNote?: boolean;
 	useCardNote2?: boolean;
 	useMarkdownRender?: boolean;
+        useFilenameAsTime?: boolean;
 
 	// add note 
 	useZkPrefixerFormat?: boolean;
@@ -30,7 +31,7 @@ export interface BanyanPluginSettings {
 	lastVersion?: string;
 }
 
-export const CUR_SETTINGS_VERSION = 10;
+export const CUR_SETTINGS_VERSION = 11;
 
 
 
@@ -49,6 +50,7 @@ export const DEFAULT_SETTINGS: BanyanPluginSettings = {
 	showBacklinksInCardNote: false,
 	useCardNote2: false,
 	useMarkdownRender: true,
+        useFilenameAsTime: false,
 
 	// add note
 	useZkPrefixerFormat: false,

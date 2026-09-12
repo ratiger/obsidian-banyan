@@ -34,6 +34,7 @@ export class BanyanSettingTab extends PluginSettingTab {
 		this.setupShowBacklinksSetting(containerEl);
 		this.setupUseCardNote2Setting(containerEl);
 		this.setupUseMarkdownRenderSetting(containerEl);
+	        this.setupUseFilenameAsTimeSetting(containerEl);
 
 		// 编辑
 		new Setting(containerEl).setName(i18n.t('setting_header_editor')).setHeading();
@@ -194,6 +195,19 @@ export class BanyanSettingTab extends PluginSettingTab {
 				toggle.setValue(settings.useMarkdownRender ?? true)
 					.onChange(async (value) => {
 						useCombineStore.getState().updateUseMarkdownRender(value);
+					});
+			});
+	}
+
+  	setupUseFilenameAsTimeSetting(containerEl: HTMLElement) {
+		const settings = useCombineStore.getState().settings;
+		new Setting(containerEl)
+			.setName(i18n.t('setting_use_filename_as_time_name'))
+			.setDesc(i18n.t('setting_use_filename_as_time_desc'))
+			.addToggle(toggle => {
+				toggle.setValue(settings.useFilenameAsTime ?? false)
+					.onChange(async (value) => {
+						useCombineStore.getState().updateUseFilenameAsTime(value);
 					});
 			});
 	}
